@@ -13,14 +13,17 @@ import java.util.concurrent.atomic.AtomicLong;
  * @version 0.01
  */
 public class ConnectedPlayer extends Thread {
+    private String userName;
+    private int index;
     private Socket pSocket;
     private DataInputStream pDIS;
     private DataOutputStream pDOS;
     private AtomicLong recievedID;
-    private boolean packetRecieved = false;
 
-    public ConnectedPlayer(Socket pSocket) throws IOException {
+    public ConnectedPlayer(Socket pSocket, String userName, int index) throws IOException {
         this.pSocket = pSocket;
+        this.userName = userName;
+        this.index = index;
 
         pDIS = new DataInputStream(pSocket.getInputStream());
         pDOS = new DataOutputStream(pSocket.getOutputStream());
@@ -28,6 +31,10 @@ public class ConnectedPlayer extends Thread {
         recievedID = new AtomicLong(0L);
 
         this.setDaemon(true);
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public Socket getPSocket() {
@@ -40,10 +47,6 @@ public class ConnectedPlayer extends Thread {
 
     public DataOutputStream getPDOS() {
         return pDOS;
-    }
-
-    public boolean hasPacketRecieved() {
-        return packetRecieved;
     }
 
     @Override

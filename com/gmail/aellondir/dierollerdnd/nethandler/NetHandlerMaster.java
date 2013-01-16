@@ -96,9 +96,27 @@ public class NetHandlerMaster extends NetHandler implements Runnable {
 
     private class PacketHandler extends Thread {
         private PriorityQueue<Packet> prQueue;
+        private boolean run = true;
 
         public PacketHandler() {
             prQueue = new PriorityQueue<>();
+        }
+
+        public void shutDown() {
+            run = false;
+        }
+
+        public boolean addToQueue(Packet packet) {
+            boolean added = false;
+
+            return prQueue.add(packet);
+        }
+
+        @Override
+        public void run() {
+            while (run) {
+
+            }
         }
     }
 }
