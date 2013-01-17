@@ -15,22 +15,26 @@ import java.util.Set;
  * @serial JPGH.0001 class 3 implementation 1
  * @version 0.01
  */
-public class NetHandlerMaster extends NetHandler implements Runnable {
+public class NetHandlerMaster extends NetHandler {
 
     private int expectedConnections;
     private ServerSocket masSocket;
     private HashMap<String, ConnectedPlayer> conPl;
     private boolean keepAlive = true;
+    private PacketHandler pHandler;
 
     public NetHandlerMaster(String passWord, int expectedConnections) {
         super("MASTER", passWord);
         this.expectedConnections = expectedConnections;
+        pHandler = new PacketHandler();
 
         try {
             masSocket = new ServerSocket(0);
         } catch (final IOException e) {
             getFrame().errorScreen(e);
         }
+
+        this.setDaemon(true);
     }
 
     public Set<String> getUsernames() {
@@ -118,8 +122,8 @@ public class NetHandlerMaster extends NetHandler implements Runnable {
                     if (prQueue.isEmpty()) {
                         break;
                     }
-                    
 
+                    //@todo packet handleing logic may be handed off to another class
 
                 } while (run);
 
