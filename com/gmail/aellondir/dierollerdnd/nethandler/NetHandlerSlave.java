@@ -1,5 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
+import java.net.*;
+
 /**
  *Abstract class defining the basic operation of the NetHandler subclasses.
  *
@@ -8,9 +10,13 @@ package com.gmail.aellondir.dierollerdnd.nethandler;
  * @version 0.01
  */
 public class NetHandlerSlave extends NetHandler {
+    private long sentID = 0L;
+    private long recievedID = 0L;
+    private ServerSocket socket;
 
-    public NetHandlerSlave(String username, String passWord) {
+    public NetHandlerSlave(String username, String passWord, String inetAddress) {
         super(username, passWord);
+
     }
 
     @Override

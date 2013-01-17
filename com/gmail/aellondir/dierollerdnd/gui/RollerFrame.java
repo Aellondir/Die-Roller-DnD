@@ -162,22 +162,29 @@ public class RollerFrame extends JFrame {
     }
 
     public final void errorScreen(Exception e) {
+        this.setVisible(false);
+        this.removeAll();
+        this.validate();
+
         int columns = e.toString().length(), rows = 1;
         this.setLayout(new GridBagLayout());
 
-        jTARes = new JTextArea(e.toString() + "\n\n");
-        jTARes.setLineWrap(true);
-        jTARes.setWrapStyleWord(true);
-        jTARes.setEditable(false);
+        JTextArea jTAErr = new JTextArea(e.toString() + "\n\n");
+        jTAErr.setLineWrap(true);
+        jTAErr.setWrapStyleWord(true);
+        jTAErr.setEditable(false);
 
         for (StackTraceElement sTE : e.getStackTrace()) {
             columns = sTE.toString().length() > columns ? sTE.toString().length() : columns;
 
             jTARes.append(sTE.toString() + '\n');
+
+            rows++;
         }
 
         jTARes.setColumns(columns);
         jTARes.setRows(rows);
+        jTARes.validate();
 
         this.getContentPane().add(jTARes);
         this.setLocationRelativeTo(null);

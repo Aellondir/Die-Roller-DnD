@@ -7,8 +7,9 @@ import java.net.*;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Set;
+
 /**
- *Handles the master side of the relationship between die rollers.
+ * Handles the master side of the relationship between die rollers.
  *
  * @author James Hull
  * @serial JPGH.0001 class 3 implementation 1
@@ -18,7 +19,7 @@ public class NetHandlerMaster extends NetHandler implements Runnable {
 
     private int expectedConnections;
     private ServerSocket masSocket;
-    private HashMap<String, ConnectedPlayer> playerSockets;
+    private HashMap<String, ConnectedPlayer> conPl;
     private boolean keepAlive = true;
 
     public NetHandlerMaster(String passWord, int expectedConnections) {
@@ -33,7 +34,7 @@ public class NetHandlerMaster extends NetHandler implements Runnable {
     }
 
     public Set<String> getUsernames() {
-        return playerSockets.keySet();
+        return conPl.keySet();
     }
 
     @Override
@@ -47,18 +48,17 @@ public class NetHandlerMaster extends NetHandler implements Runnable {
     }
 
     private void connectionAccepted(String username, Socket socket) {
-
     }
 
     @Override
     public void run() {
         while (keepAlive) {
             try (Socket slave = masSocket.accept();) {
-            if (slave != null) {
-                AuthenticateConnection aC = new AuthenticateConnection(slave);
+                if (slave != null) {
+                    AuthenticateConnection aC = new AuthenticateConnection(slave);
 
-                aC.start();
-            }
+                    aC.start();
+                }
 
             } catch (final IOException e) {
                 try {
@@ -73,6 +73,7 @@ public class NetHandlerMaster extends NetHandler implements Runnable {
     }
 
     private class AuthenticateConnection extends Thread {
+
         private Socket socket;
 
         public AuthenticateConnection(Socket socket) throws IOException {
@@ -85,7 +86,6 @@ public class NetHandlerMaster extends NetHandler implements Runnable {
                 String str = dIS.readUTF();
 
                 if (str.equals(getPW())) {
-
                 }
 
             } catch (final IOException e) {
@@ -95,6 +95,7 @@ public class NetHandlerMaster extends NetHandler implements Runnable {
     }
 
     private class PacketHandler extends Thread {
+
         private PriorityQueue<Packet> prQueue;
         private boolean run = true;
 
@@ -107,16 +108,27 @@ public class NetHandlerMaster extends NetHandler implements Runnable {
         }
 
         public boolean addToQueue(Packet packet) {
-            boolean added = false;
-
             return prQueue.add(packet);
         }
 
         @Override
         public void run() {
-            while (run) {
+            do {
+                do {
+                    if (prQueue.isEmpty()) {
+                        break;
+                    }
+                    
 
-            }
+
+                } while (run);
+
+                try {
+                    Thread.sleep(250L);
+                } catch (InterruptedException e) {
+                    getFrame().errorScreen(e);
+                }
+            } while (run);
         }
     }
 }
