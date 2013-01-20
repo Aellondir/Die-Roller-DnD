@@ -3,7 +3,7 @@ package com.gmail.aellondir.dierollerdnd.nethandler;
 import java.net.*;
 
 /**
- *Abstract class defining the basic operation of the NetHandler subclasses.
+ *Handles the slave side of the master/slave relationship for the die roller.
  *
  * @author James Hull
  * @serial JPGH.0001 class 3 implementation 2

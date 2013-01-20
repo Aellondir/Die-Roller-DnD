@@ -1,6 +1,6 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
-import com.gmail.aellondir.dierollerdnd.nethandler.packet.Packet;
+import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -18,14 +18,15 @@ public class ConnectedPlayer extends Thread {
     private DataOutputStream pDOS;
     private static long recievedID = 0L;
     private static long sentID = 0L;
-    private static Packet[] recievedPackets;
-
+    private boolean connected;
+    
     public ConnectedPlayer(Socket pSocket) throws IOException {
         this.pSocket = pSocket;
 
         pDIS = new DataInputStream(pSocket.getInputStream());
         pDOS = new DataOutputStream(pSocket.getOutputStream());
 
+        connected = true;
         this.setDaemon(true);
     }
 
@@ -51,7 +52,7 @@ public class ConnectedPlayer extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        while (connected) {
 
         }
     }

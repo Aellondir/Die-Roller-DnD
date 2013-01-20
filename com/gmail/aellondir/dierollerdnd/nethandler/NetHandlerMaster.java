@@ -31,6 +31,17 @@ public class NetHandlerMaster extends NetHandler {
         try {
             masSocket = new ServerSocket(0);
         } catch (final IOException e) {
+            
+            if (masSocket != null) {
+                try {
+                    masSocket.close();
+                    
+                    masSocket = null;
+                } catch (final IOException e1) {
+                    getFrame().errorScreen(e1);
+                }
+            }
+            
             getFrame().errorScreen(e);
         }
 

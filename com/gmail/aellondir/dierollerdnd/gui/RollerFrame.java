@@ -23,6 +23,7 @@ public class RollerFrame extends JFrame {
     private NetHandler nH;
 
     private static RollerFrame rF;
+    private ResourceBundle bundle;
 
     private JPanel[] jPanelArr;
     private JComboBox jCBDice;
@@ -34,6 +35,13 @@ public class RollerFrame extends JFrame {
     private JButton msgJB;
     private JScrollPane jSP1;
     private JScrollPane jSP2;
+    private JMenuBar jMB;
+    private JMenu jMFile;
+    private JMenu jMConn;
+    private JMenu jMWindow;
+    private JMenuItem[] jMIFileArr;
+    private JMenuItem[] jMIConnArr;
+    private JMenuItem[] jMIWindowArr;
 
     public static void main(String args[]) {
         rF = new RollerFrame();
@@ -52,7 +60,7 @@ public class RollerFrame extends JFrame {
     private void initComponents() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        ResourceBundle bundle = ResourceBundle.getBundle("com.gmail.aellondir.dierollerdnd.gui.Bundle");
+        bundle = ResourceBundle.getBundle("com.gmail.aellondir.dierollerdnd.gui.Bundle");
 
         this.setTitle(bundle.getString("RollerFrame.frameTitle"));
 
@@ -156,6 +164,45 @@ public class RollerFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.pack();
+    }
+
+    private JMenuBar createMenuBar() {
+        jMB = new JMenuBar();
+
+        jMFile = new JMenu(bundle.getString("RollerFrame.JMF"));
+        jMConn = new JMenu(bundle.getString("RollerFrame.JMC"));
+        jMWindow = new JMenu(bundle.getString("RollerFrame.JMW"));
+
+        jMIFileArr = new JMenuItem[2];
+
+        jMIFileArr[0] = new JCheckBoxMenuItem(bundle.getString("RollerFrame.JMIF1"), false);
+        jMIFileArr[1] = new JMenuItem(bundle.getString("RollerFrame.JMIF2"));
+
+        jMFile.add(jMIFileArr[0]);
+        jMFile.add(new JSeparator());
+        jMFile.add(jMIFileArr[1]);
+
+        jMB.add(jMFile);
+
+        jMIConnArr = new JMenuItem[3];
+
+        jMIConnArr[0] = new JMenuItem(bundle.getString("RollerFrame.JMIC1"));
+        jMIConnArr[1] = new JMenuItem(bundle.getString("RollerFrame.JMIC2"));
+        jMIConnArr[2] = new JMenuItem(bundle.getString("RollerFrame.JMIC3"));
+
+        jMConn.add(jMIConnArr[0]);
+        jMConn.add(jMIConnArr[1]);
+        jMConn.add(jMIConnArr[2]);
+
+        jMB.add(jMConn);
+
+        jMIWindowArr = new JMenuItem[1];
+
+        jMIWindowArr[0] = new JMenuItem(bundle.getString("RollerFrame.JMIW1"));
+
+        jMWindow.add(jMIWindowArr[0]);
+
+        return jMB;
     }
 
     private void addListeners() {

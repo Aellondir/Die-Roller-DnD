@@ -1,6 +1,6 @@
 package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 
-import java.io.DataInputStream;
+import java.io.*;
 
 
 public class ConnectPacket extends Packet {
@@ -11,7 +11,7 @@ public class ConnectPacket extends Packet {
     }
 
     @Override
-    public boolean processSendPacket(DataInputStream dOS) {
+    public boolean processSendPacket(DataOutputStream dOS) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

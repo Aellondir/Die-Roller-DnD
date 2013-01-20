@@ -19,5 +19,5 @@ public abstract class Packet {
 
     public abstract boolean processReadPacket(DataInputStream dIS);
 
-    public abstract boolean processSendPacket(DataInputStream dOS);
+    public abstract boolean processSendPacket(DataOutputStream dOS);
 }

@@ -1,7 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
 import static com.gmail.aellondir.dierollerdnd.gui.RollerFrame.getFrame;
-import java.io.UnsupportedEncodingException;
+import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
 import java.nio.charset.Charset;
 
 /**
@@ -15,10 +15,12 @@ public abstract class NetHandler extends Thread {
 
     protected String username;
     protected String truncatedUsername = null;
-    private static final Charset cs = Charset.forName("UTF-8");
+    private static Charset cs;
     protected String passWord;
 
     public NetHandler(String username, String passWord) {
+        cs = Charset.forName("UTF-8");
+        
         if (username.getBytes(cs).length > 16) {
             this.username = username;
 
