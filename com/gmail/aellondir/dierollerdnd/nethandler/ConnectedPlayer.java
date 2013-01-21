@@ -19,9 +19,11 @@ public class ConnectedPlayer extends Thread {
     private static long recievedID = 0L;
     private static long sentID = 0L;
     private boolean connected;
-    
-    public ConnectedPlayer(Socket pSocket) throws IOException {
+    private boolean isUNTrunc;
+
+    public ConnectedPlayer(Socket pSocket, boolean isUNTrunc) throws IOException {
         this.pSocket = pSocket;
+        this.isUNTrunc = isUNTrunc;
 
         pDIS = new DataInputStream(pSocket.getInputStream());
         pDOS = new DataOutputStream(pSocket.getOutputStream());

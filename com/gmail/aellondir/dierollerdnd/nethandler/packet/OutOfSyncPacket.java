@@ -11,12 +11,12 @@ import java.io.*;
 public class OutOfSyncPacket extends Packet {
 
     @Override
-    public boolean processReadPacket(DataInputStream dIS) {
+    public void processReadPacket(DataInputStream dIS) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean processSendPacket(DataOutputStream dOS) {
+    public void processSendPacket(DataOutputStream dOS) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

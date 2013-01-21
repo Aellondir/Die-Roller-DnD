@@ -1,18 +1,33 @@
 package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 
+import com.gmail.aellondir.dierollerdnd.nethandler.NetHandler;
 import java.io.*;
 
-
 public class ConnectPacket extends Packet {
+    private byte packetSize;
+    private boolean isUnTrunc = false;
+    private byte[] un;
+    private byte[] pW;
 
-    @Override
-    public boolean processReadPacket(DataInputStream dIS) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    private ConnectPacket(String un, String pW, boolean isUnTrunc) {
+        this.un = un.getBytes(NetHandler.getCharset());
+        this.pW = pW.getBytes(NetHandler.getCharset());
+        this.packetType = 1;
+        this.sentID = new byte[1];
+        this.sentID[0] = -1;
+
+        this.isUnTrunc = isUnTrunc;
+
+        //the integer literals (not the calls to the .length value of arrays) respectively represent
+        //packetType,
+        packetSize = this.sentID.length + 1 +
     }
 
     @Override
-    public boolean processSendPacket(DataOutputStream dOS) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void processReadPacket(DataInputStream dIS) {
     }
 
+    @Override
+    public void processSendPacket(DataOutputStream dOS) {
+    }
 }

@@ -1,0 +1,7 @@
+Packet=0
+ConnectPacket=1
+ConnectionAcceptedPacket=2
+RollDicePacket=3
+ResultPacket=4
+MultiResultPacket=5
+OutOfSyncPacket=127

@@ -15,12 +15,10 @@ public abstract class NetHandler extends Thread {
 
     protected String username;
     protected String truncatedUsername = null;
-    private static Charset cs;
+    private static Charset cs = Charset.forName("UTF-8");
     protected String passWord;
 
     public NetHandler(String username, String passWord) {
-        cs = Charset.forName("UTF-8");
-        
         if (username.getBytes(cs).length > 16) {
             this.username = username;
 
@@ -45,9 +43,14 @@ public abstract class NetHandler extends Thread {
         return username;
     }
 
-    public abstract boolean isMaster();
+    public boolean isUNTrunc() {
+        return truncatedUsername != null;
+    }
 
-    public Charset getCharset() {
+    public static Charset getCharset() {
         return cs;
     }
+
+    public abstract boolean isMaster();
+
 }

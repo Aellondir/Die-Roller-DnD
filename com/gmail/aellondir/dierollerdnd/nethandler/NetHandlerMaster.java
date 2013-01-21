@@ -19,6 +19,7 @@ public class NetHandlerMaster extends NetHandler {
 
     private int expectedConnections;
     private ServerSocket masSocket;
+    private InetAddress address;
     private HashMap<String, ConnectedPlayer> conPl;
     private boolean keepAlive = true;
     private PacketHandler pHandler;
@@ -31,20 +32,21 @@ public class NetHandlerMaster extends NetHandler {
         try {
             masSocket = new ServerSocket(0);
         } catch (final IOException e) {
-            
+
             if (masSocket != null) {
                 try {
                     masSocket.close();
-                    
+
                     masSocket = null;
                 } catch (final IOException e1) {
                     getFrame().errorScreen(e1);
                 }
             }
-            
+
             getFrame().errorScreen(e);
         }
 
+        address = masSocket.getInetAddress();
         this.setDaemon(true);
     }
 
@@ -52,14 +54,13 @@ public class NetHandlerMaster extends NetHandler {
         return conPl.keySet();
     }
 
+    public InetAddress getAddress() {
+        return address;
+    }
+
     @Override
     public boolean isMaster() {
         return true;
-    }
-
-    public final int packetRecieved(final Packet paramPacket) {
-
-        return paramPacket.getPacketID();
     }
 
     private void connectionAccepted(String username, Socket socket) {
@@ -67,7 +68,8 @@ public class NetHandlerMaster extends NetHandler {
 
     @Override
     public void run() {
-        while (keepAlive) {
+        int keepAlive = 0;
+        while (keepAlive < expectedConnections) {
             try (Socket slave = masSocket.accept();) {
                 if (slave != null) {
                     AuthenticateConnection aC = new AuthenticateConnection(slave);
@@ -84,6 +86,8 @@ public class NetHandlerMaster extends NetHandler {
 
                 getFrame().errorScreen(e);
             }
+
+
         }
     }
 
@@ -98,10 +102,6 @@ public class NetHandlerMaster extends NetHandler {
         @Override
         public void run() {
             try (DataInputStream dIS = new DataInputStream(socket.getInputStream()); DataOutputStream dOS = new DataOutputStream(socket.getOutputStream())) {
-                String str = dIS.readUTF();
-
-                if (str.equals(getPW())) {
-                }
 
             } catch (final IOException e) {
                 getFrame().errorScreen(e);

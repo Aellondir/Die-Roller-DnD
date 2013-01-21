@@ -9,15 +9,11 @@ import java.io.*;
  * @version 0.01
  */
 public abstract class Packet {
-    protected int sentBy;
-    protected long packetSendID;
-    protected int packetID;
+    protected byte packetType;
+    // if this is the connect packet then this array will be set to one index, set to -1.
+    protected byte[] sentID;
 
-    public int getPacketID() {
-        return packetID;
-    }
+    public abstract void processReadPacket(DataInputStream dIS);
 
-    public abstract boolean processReadPacket(DataInputStream dIS);
-
-    public abstract boolean processSendPacket(DataOutputStream dOS);
+    public abstract void processSendPacket(DataOutputStream dOS);
 }

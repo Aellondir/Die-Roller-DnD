@@ -159,6 +159,8 @@ public class RollerFrame extends JFrame {
         msgJB.setEnabled(false);
         jTAMsg.setEnabled(false);
 
+        this.setJMenuBar(this.createMenuBar());
+
         this.addListeners();
 
         this.setLocationRelativeTo(null);
