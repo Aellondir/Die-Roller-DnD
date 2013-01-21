@@ -11,9 +11,9 @@ import java.io.*;
 public abstract class Packet {
     protected byte packetType;
     // if this is the connect packet then this array will be set to one index, set to -1.
-    protected byte[] sentID;
+    protected Long sentID;
 
-    public abstract void processReadPacket(DataInputStream dIS);
+    public abstract Packet processReadPacket(DataInputStream dIS)throws IOException;
 
-    public abstract void processSendPacket(DataOutputStream dOS);
+    public abstract void processSendPacket(DataOutputStream dOS) throws IOException;
 }
