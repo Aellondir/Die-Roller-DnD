@@ -10,6 +10,11 @@ public abstract class Packet {
     protected byte packetType = 0;
     protected long sentID;
 
+    public Packet(byte packetType, long sentID) {
+        this.packetType = packetType;
+        this.sentID = sentID;
+    }
+
     public byte getPacketType() {
         return packetType;
     }

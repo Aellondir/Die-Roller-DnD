@@ -4,46 +4,61 @@ import java.io.*;
 
 public class ConnectPacket extends Packet {
     private boolean isUnTrunc = false;
-    private String un;
+    private String unTrunc;
+    private String unFull;
     private String pW;
 
-    @SuppressWarnings(value="Field")
-    private ConnectPacket(String un, String pW, boolean isUnTrunc, long sentID) {
-        this.un = un;
+    private ConnectPacket(String pW, String unTrunc, String unFull, boolean isUnTrunc) {
+        super((byte) 1, -1L);
         this.pW = pW;
-        this.packetType = 1;
-        this.sentID = sentID;
+        this.unTrunc = unTrunc;
+
+        if (unFull != null) {
+            this.unFull = unTrunc;
+        } else {
+            this.unFull = unTrunc;
+        }
 
         this.isUnTrunc = isUnTrunc;
     }
 
-    public static ConnectPacket cPFactory(String un, String pW, boolean isUnTrunc, long sentID) {
-        return new ConnectPacket(un, pW, isUnTrunc, sentID);
+    public static ConnectPacket cPFactory(String pW, String unTrunc, String unFull, boolean isUnTrunc) {
+        return new ConnectPacket(pW, unTrunc, unFull, isUnTrunc);
     }
 
     public static ConnectPacket processReadPacket(DataInputStream dIS) throws IOException {
         long sentIDR = dIS.readLong();
         String pWR = dIS.readUTF();
-        String unR = dIS.readUTF();
+        String unTruncR = dIS.readUTF();
+        String unFullR = dIS.readUTF();
         boolean isUnTruncR = dIS.readBoolean();
 
-        return ConnectPacket.cPFactory(unR, pWR, isUnTruncR, sentIDR);
+        if (sentIDR != -1) {
+            throw new IllegalPacketException();
+        }
+
+        return ConnectPacket.cPFactory(pWR, unTruncR, unFullR, isUnTruncR);
     }
 
     public void processSendPacket(DataOutputStream dOS) throws IOException {
         dOS.writeByte(packetType);
         dOS.writeLong(sentID);
         dOS.writeUTF(pW);
-        dOS.writeUTF(un);
+        dOS.writeUTF(unTrunc);
+        dOS.writeUTF(unFull);
         dOS.writeBoolean(isUnTrunc);
     }
 
-    public boolean isIsUnTrunc() {
+    public boolean isUnTrunc() {
         return isUnTrunc;
     }
 
-    public String getUn() {
-        return un;
+    public String getUnTrunc() {
+        return unTrunc;
+    }
+
+    public String getUnFull() {
+        return unFull;
     }
 
     public String getpW() {

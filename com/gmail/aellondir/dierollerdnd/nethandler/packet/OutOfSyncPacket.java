@@ -9,12 +9,7 @@ import java.io.*;
  * @version 0.01
  */
 public class OutOfSyncPacket extends Packet {
-
-    public static OutOfSyncPacket processReadPacket(DataInputStream dIS) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public static void processSendPacket(DataOutputStream dOS) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public OutOfSyncPacket(long sentID) {
+        super((byte) 127, sentID);
     }
 }

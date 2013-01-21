@@ -14,30 +14,34 @@ import java.net.Socket;
  * @version 0.01
  */
 public class AuthenticateConnection extends Thread {
-        private Socket socket;
-        private NetHandlerMaster nHM;
 
-        public AuthenticateConnection(Socket socket, NetHandlerMaster nHM) throws IOException {
-            this.socket = socket;
-            this.nHM = nHM;
-        }
+    private Socket socket;
+    private NetHandlerMaster nHM;
 
-        @Override
-        public void run() {
-            try (DataInputStream dIS = new DataInputStream(socket.getInputStream()); DataOutputStream dOS = new DataOutputStream(socket.getOutputStream())) {
-                byte packetType = dIS.readByte();
+    public AuthenticateConnection(Socket socket, NetHandlerMaster nHM) throws IOException {
+        this.socket = socket;
+        this.nHM = nHM;
+    }
 
-                if (packetType != 1) {
-                    nHM.connectionDenied(socket);
-                }
+    @Override
+    public void run() {
+        try (DataInputStream dIS = new DataInputStream(socket.getInputStream()); DataOutputStream dOS = new DataOutputStream(socket.getOutputStream())) {
+            byte packetType = dIS.readByte();
 
-                ConnectPacket cP = ConnectPacket.processReadPacket(dIS);
+            if (packetType != 1) {
 
-                if (nHM.getPW().equals(cP.getpW())) {
-                    nHM.connectionAccepted(socket, cP);
-                }
-            } catch (final IOException e) {
-                getFrame().errorScreen(e);
+                nHM.connectionDenied(socket);
             }
+
+            ConnectPacket cP = ConnectPacket.processReadPacket(dIS);
+
+            if (nHM.getPW().equals(cP.getpW())) {
+                nHM.connectionAccepted(socket, cP);
+            } else {
+                nHM.connectionDenied(socket);
+            }
+        } catch (final IOException e) {
+            getFrame().errorScreen(e);
         }
     }
+}

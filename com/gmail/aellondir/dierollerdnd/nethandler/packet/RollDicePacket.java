@@ -4,12 +4,7 @@ import java.io.*;
 
 public class RollDicePacket extends Packet {
 
-    public void processReadPacket(DataInputStream dIS) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public RollDicePacket(long sentID) {
+        super((byte) 4, sentID);
     }
-
-    public void processSendPacket(DataOutputStream dOS) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
 }

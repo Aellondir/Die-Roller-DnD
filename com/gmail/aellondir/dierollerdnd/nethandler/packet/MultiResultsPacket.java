@@ -5,12 +5,7 @@ import java.io.*;
 
 public class MultiResultsPacket extends Packet {
 
-    public static MultiResultsPacket processReadPacket(DataInputStream dIS) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public MultiResultsPacket(long sentID) {
+        super((byte) 6, sentID);
     }
-
-    public static void processSendPacket(DataOutputStream dOS) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
 }

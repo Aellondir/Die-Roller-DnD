@@ -1,8 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
 import static com.gmail.aellondir.dierollerdnd.gui.RollerFrame.getFrame;
-import com.gmail.aellondir.dierollerdnd.nethandler.packet.ConnectPacket;
-import com.gmail.aellondir.dierollerdnd.nethandler.packet.Packet;
+import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
@@ -47,6 +46,8 @@ public class NetHandlerMaster extends NetHandler {
         }
 
         address = masSocket.getInetAddress();
+        pHandler = new PacketHandler();
+
         this.setDaemon(true);
     }
 
@@ -67,6 +68,10 @@ public class NetHandlerMaster extends NetHandler {
     }
 
     protected void connectionDenied(Socket socket) {
+    }
+
+    protected void callGC() {
+        System.gc();
     }
 
     @Override
@@ -91,44 +96,6 @@ public class NetHandlerMaster extends NetHandler {
             }
 
 
-        }
-    }
-
-    private class PacketHandler extends Thread {
-
-        private PriorityQueue<Packet> prQueue;
-        private boolean run = true;
-
-        public PacketHandler() {
-            prQueue = new PriorityQueue<>();
-        }
-
-        public void shutDown() {
-            run = false;
-        }
-
-        public boolean addToQueue(Packet packet) {
-            return prQueue.add(packet);
-        }
-
-        @Override
-        public void run() {
-            do {
-                do {
-                    if (prQueue.isEmpty()) {
-                        break;
-                    }
-
-                    //@todo packet handleing logic may be handed off to another class
-
-                } while (run);
-
-                try {
-                    Thread.sleep(250L);
-                } catch (InterruptedException e) {
-                    getFrame().errorScreen(e);
-                }
-            } while (run);
         }
     }
 }
