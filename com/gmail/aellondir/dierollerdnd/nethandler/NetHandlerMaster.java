@@ -1,6 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
 import static com.gmail.aellondir.dierollerdnd.gui.RollerFrame.getFrame;
+import com.gmail.aellondir.dierollerdnd.nethandler.packet.ConnectPacket;
 import com.gmail.aellondir.dierollerdnd.nethandler.packet.Packet;
 import java.io.*;
 import java.net.*;
@@ -21,7 +22,6 @@ public class NetHandlerMaster extends NetHandler {
     private ServerSocket masSocket;
     private InetAddress address;
     private HashMap<String, ConnectedPlayer> conPl;
-    private boolean keepAlive = true;
     private PacketHandler pHandler;
 
     public NetHandlerMaster(String passWord, int expectedConnections) {
@@ -63,7 +63,10 @@ public class NetHandlerMaster extends NetHandler {
         return true;
     }
 
-    private void connectionAccepted(String username, Socket socket) {
+    protected void connectionAccepted(Socket socket, ConnectPacket cP) {
+    }
+
+    protected void connectionDenied(Socket socket) {
     }
 
     @Override
@@ -72,7 +75,7 @@ public class NetHandlerMaster extends NetHandler {
         while (keepAlive < expectedConnections) {
             try (Socket slave = masSocket.accept();) {
                 if (slave != null) {
-                    AuthenticateConnection aC = new AuthenticateConnection(slave);
+                    AuthenticateConnection aC = new AuthenticateConnection(slave, this);
 
                     aC.start();
                 }
@@ -88,24 +91,6 @@ public class NetHandlerMaster extends NetHandler {
             }
 
 
-        }
-    }
-
-    private class AuthenticateConnection extends Thread {
-
-        private Socket socket;
-
-        public AuthenticateConnection(Socket socket) throws IOException {
-            this.socket = socket;
-        }
-
-        @Override
-        public void run() {
-            try (DataInputStream dIS = new DataInputStream(socket.getInputStream()); DataOutputStream dOS = new DataOutputStream(socket.getOutputStream())) {
-
-            } catch (final IOException e) {
-                getFrame().errorScreen(e);
-            }
         }
     }
 

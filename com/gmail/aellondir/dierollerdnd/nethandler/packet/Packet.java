@@ -1,7 +1,5 @@
 package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 
-import java.io.*;
-
 /**
  *
  * @author James Hull
@@ -9,11 +7,14 @@ import java.io.*;
  * @version 0.01
  */
 public abstract class Packet {
-    protected byte packetType;
-    // if this is the connect packet then this array will be set to one index, set to -1.
-    protected Long sentID;
+    protected byte packetType = 0;
+    protected long sentID;
 
-    public abstract Packet processReadPacket(DataInputStream dIS)throws IOException;
+    public byte getPacketType() {
+        return packetType;
+    }
 
-    public abstract void processSendPacket(DataOutputStream dOS) throws IOException;
+    public Long getSentID() {
+        return sentID;
+    }
 }

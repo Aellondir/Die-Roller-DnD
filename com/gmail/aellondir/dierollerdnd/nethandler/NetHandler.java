@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
  * Abstract class defining the basic operation of the NetHandler subclasses.
  *
  * @author James Hull
- * @serial JPGH.0001 abst class 3
+ * @serial JPGH.0001 abst class 1
  * @version 0.01
  */
 public abstract class NetHandler extends Thread {

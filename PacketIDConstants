@@ -1,7 +1,8 @@
 Packet=0
 ConnectPacket=1
 ConnectionAcceptedPacket=2
-RollDicePacket=3
-ResultPacket=4
-MultiResultPacket=5
+ConnectionDeniedPacket=3
+RollDicePacket=4
+ResultPacket=5
+MultiResultPacket=6
 OutOfSyncPacket=127

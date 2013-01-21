@@ -9,7 +9,7 @@ import java.net.*;
 /**
  *
  * @author James Hull
- * @serial JPGH.0001 class 4
+ * @serial JPGH.0001 class 3
  * @version 0.01
  */
 public class ConnectedPlayer extends Thread {

@@ -5,13 +5,11 @@ import java.io.*;
 
 public class ConnectionAcceptedPacket extends Packet {
 
-    @Override
-    public void processReadPacket(DataInputStream dIS) {
+    public static ConnectionAcceptedPacket processReadPacket(DataInputStream dIS) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public void processSendPacket(DataOutputStream dOS) {
+    public static void processSendPacket(DataOutputStream dOS) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
