@@ -2,6 +2,7 @@ package com.gmail.aellondir.dierollerdnd.gui;
 
 import com.gmail.aellondir.dierollerdnd.enumerations.DiceDefinitions;
 import com.gmail.aellondir.dierollerdnd.nethandler.NetHandler;
+import com.gmail.aellondir.dierollerdnd.nethandler.NetHandlerMaster;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.*;
@@ -208,6 +209,15 @@ public class RollerFrame extends JFrame {
     }
 
     private void addListeners() {
+    }
+
+
+    public void updateJCB() {
+        jCBPlayers.removeAllItems();
+
+        for (String str:((NetHandlerMaster) nH).getUsernames()) {
+            jCBPlayers.addItem(str);
+        }
     }
 
     public final void errorScreen(Exception e) {

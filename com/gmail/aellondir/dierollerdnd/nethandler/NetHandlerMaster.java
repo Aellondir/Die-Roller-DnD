@@ -5,8 +5,6 @@ import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Set;
 
 /**
  * Handles the master side of the relationship between die rollers.
@@ -27,6 +25,7 @@ public class NetHandlerMaster extends NetHandler {
         super("MASTER", passWord);
         this.expectedConnections = expectedConnections;
         pHandler = new PacketHandler();
+        conPl = new HashMap<>();
 
         try {
             masSocket = new ServerSocket(0);
@@ -46,13 +45,21 @@ public class NetHandlerMaster extends NetHandler {
         }
 
         address = masSocket.getInetAddress();
-        pHandler = new PacketHandler();
 
         this.setDaemon(true);
     }
 
-    public Set<String> getUsernames() {
-        return conPl.keySet();
+    public String[] getUsernames() {
+        String[] unArr = new String[conPl.size()];
+        int i = 0;
+
+        for (ConnectedPlayer cP : conPl.values()) {
+            unArr[i] = cP.getUN(false);
+
+            i++;
+        }
+
+        return unArr;
     }
 
     public InetAddress getAddress() {
@@ -65,6 +72,45 @@ public class NetHandlerMaster extends NetHandler {
     }
 
     protected void connectionAccepted(Socket socket, ConnectPacket cP) {
+        if (!pHandler.isAlive()) {
+            pHandler.start();
+        }
+
+        try {
+            if (conPl.isEmpty()) {
+
+                conPl.put(cP.getUnTrunc(), new ConnectedPlayer(socket, cP.isUnTrunc(), cP.getUnFull()));
+
+            } else if (cP.isUnTrunc() && conPl.containsKey(cP.getUnTrunc())) {
+                int preFixChar = 1;
+                String preFixStr = Integer.toString(preFixChar) + cP.getUnTrunc();
+
+                while (conPl.containsKey(preFixStr)) {
+                    preFixChar++;
+                    preFixStr = preFixChar + cP.getUnTrunc();
+                }
+
+                boolean isUnSim = conPl.get(cP.getUnTrunc()).getUN(false).equals(cP.getUnFull());
+
+                conPl.put(preFixStr, new ConnectedPlayer(socket, cP.isUnTrunc(), cP.getUnFull(), Integer.toString(preFixChar).charAt(0), isUnSim));
+
+            } else if (!cP.isUnTrunc() && conPl.containsKey(cP.getUnFull())) {
+                int preFixChar = 1;
+                String preFixStr = Integer.toString(preFixChar) + cP.getUnFull();
+
+                while (conPl.containsKey(preFixStr)) {
+                    preFixChar++;
+                    preFixStr = preFixChar + cP.getUnFull();
+                }
+
+                conPl.put(preFixStr, new ConnectedPlayer(socket, cP.isUnTrunc(), cP.getUnFull(), Integer.toString(preFixChar).charAt(0), true));
+            } else {
+                conPl.put(cP.getUnTrunc(), new ConnectedPlayer(socket, cP.isUnTrunc(), cP.getUnFull()));
+            }
+
+        } catch (IOException e) {
+            getFrame().errorScreen(e);
+        }
     }
 
     protected void connectionDenied(Socket socket) {
