@@ -11,7 +11,7 @@ import java.net.*;
  */
 public class NetHandlerSlave extends NetHandler {
     private long sentID = 0L;
-    private long recievedID = 0L;
+    private long receivedID = 0L;
     private ServerSocket socket;
 
     public NetHandlerSlave(String username, String passWord, String inetAddress) {

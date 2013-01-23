@@ -5,6 +5,7 @@ import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
+import java.util.Calendar;
 
 /**
  * Handles the master side of the relationship between die rollers.
@@ -107,17 +108,14 @@ public class NetHandlerMaster extends NetHandler {
             } else {
                 conPl.put(cP.getUnTrunc(), new ConnectedPlayer(socket, cP.isUnTrunc(), cP.getUnFull()));
             }
-
         } catch (IOException e) {
             getFrame().errorScreen(e);
         }
+
+        conPl.get(cP.getUnTrunc()).start();
     }
 
     protected void connectionDenied(Socket socket) {
-    }
-
-    protected void callGC() {
-        System.gc();
     }
 
     @Override
@@ -140,8 +138,6 @@ public class NetHandlerMaster extends NetHandler {
 
                 getFrame().errorScreen(e);
             }
-
-
         }
     }
 }

@@ -18,7 +18,7 @@ public class ConnectedPlayer extends Thread {
     private char simTUn;
     private DataInputStream pDIS;
     private DataOutputStream pDOS;
-    private static long recievedID = 0L;
+    private static long receivedID = 0L;
     private static long sentID = 0L;
     private boolean connected;
     private boolean isUnTrunc;
@@ -81,8 +81,8 @@ public class ConnectedPlayer extends Thread {
         return pDOS;
     }
 
-    public static long getRecievedID() {
-        return recievedID;
+    public static long getReceivedID() {
+        return receivedID;
     }
 
     public static long getSentID() {

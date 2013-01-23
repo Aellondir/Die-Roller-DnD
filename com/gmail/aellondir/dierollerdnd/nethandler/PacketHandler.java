@@ -1,6 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
 import static com.gmail.aellondir.dierollerdnd.gui.RollerFrame.getFrame;
+import com.gmail.aellondir.dierollerdnd.gui.RollerFrame;
 import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
 import java.util.PriorityQueue;
 

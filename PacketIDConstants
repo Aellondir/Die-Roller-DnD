@@ -1,8 +1,14 @@
-Packet=0
-ConnectPacket=1
-ConnectionAcceptedPacket=2
-ConnectionDeniedPacket=3
-RollDicePacket=4
-ResultPacket=5
-MultiResultPacket=6
-OutOfSyncPacket=127
+#packetIDConstants -1 -- -128: reserved for error packets.
+-128=OutOfSyncPacket
+#packetIDConstants 0: assigned to Abstract Base Packet should never be sent
+0=Packet
+#packetIDConstants 1 -- 63: reserved for connection packets should not be
+#used after packets have been sent.
+1=ConnectPacket
+2=ConnectionAcceptedPacket
+3=ConnectionDeniedPacket
+4=SendNewPlayerPacket
+#packetIDConstants 64 -- 127: used for requesting and receiving die rolls.
+64=RollDicePacket
+65=ResultPacket
+66=MultiResultPacket
