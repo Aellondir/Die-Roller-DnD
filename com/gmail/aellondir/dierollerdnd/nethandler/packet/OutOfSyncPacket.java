@@ -5,7 +5,7 @@ import java.io.*;
 /**
  *
  * @author James Hull
- * @serial JPGH.0001 class 2 implementation 1
+ * @serial JPGH.0001 class 2 implementation 5
  * @version 0.01
  */
 public class OutOfSyncPacket extends Packet {

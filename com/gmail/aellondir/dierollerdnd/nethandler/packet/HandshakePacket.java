@@ -2,13 +2,19 @@ package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 
 import java.io.*;
 
-public class ConnectPacket extends Packet {
+/**
+ *
+ * @author James Hull
+ * @serial JPGH.0001 abst class 2 implementation 1
+ * @version 0.01
+ */
+public class HandshakePacket extends Packet {
     private boolean isUnTrunc = false;
     private String unTrunc;
     private String unFull;
     private String pW;
 
-    private ConnectPacket(String pW, String unTrunc, String unFull, boolean isUnTrunc) {
+    private HandshakePacket(String pW, String unTrunc, String unFull, boolean isUnTrunc) {
         super((byte) 1, -1L);
         this.pW = pW;
         this.unTrunc = unTrunc;
@@ -22,11 +28,11 @@ public class ConnectPacket extends Packet {
         this.isUnTrunc = isUnTrunc;
     }
 
-    public static ConnectPacket cPFactory(String pW, String unTrunc, String unFull, boolean isUnTrunc) {
-        return new ConnectPacket(pW, unTrunc, unFull, isUnTrunc);
+    public static HandshakePacket packetFactory(String pW, String unTrunc, String unFull, boolean isUnTrunc) {
+        return new HandshakePacket(pW, unTrunc, unFull, isUnTrunc);
     }
 
-    public static ConnectPacket processReadPacket(DataInputStream dIS) throws IOException {
+    public static HandshakePacket processReadPacket(DataInputStream dIS) throws IOException {
         long sentIDR = dIS.readLong();
         String pWR = dIS.readUTF();
         String unTruncR = dIS.readUTF();
@@ -37,9 +43,10 @@ public class ConnectPacket extends Packet {
             throw new IllegalPacketException();
         }
 
-        return ConnectPacket.cPFactory(pWR, unTruncR, unFullR, isUnTruncR);
+        return HandshakePacket.packetFactory(pWR, unTruncR, unFullR, isUnTruncR);
     }
 
+    @Override
     public void processSendPacket(DataOutputStream dOS) throws IOException {
         dOS.writeByte(packetType);
         dOS.writeLong(sentID);

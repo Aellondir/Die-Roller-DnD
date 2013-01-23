@@ -1,7 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
 import static com.gmail.aellondir.dierollerdnd.gui.RollerFrame.getFrame;
-import com.gmail.aellondir.dierollerdnd.nethandler.packet.ConnectPacket;
+import com.gmail.aellondir.dierollerdnd.nethandler.packet.HandshakePacket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class AuthenticateConnection extends Thread {
                 nHM.connectionDenied(socket);
             }
 
-            ConnectPacket cP = ConnectPacket.processReadPacket(dIS);
+            HandshakePacket cP = HandshakePacket.processReadPacket(dIS);
 
             if (nHM.getPW().equals(cP.getpW())) {
                 nHM.connectionAccepted(socket, cP);

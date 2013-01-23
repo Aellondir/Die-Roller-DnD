@@ -1,6 +1,9 @@
 package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 
+import java.io.*;
+
 /**
+ *Defines the basic operation and architecture of any number of packets.
  *
  * @author James Hull
  * @serial JPGH.0001 abst class 2
@@ -15,11 +18,15 @@ public abstract class Packet {
         this.sentID = sentID;
     }
 
-    public byte getPacketType() {
+    public void processSendPacket(DataOutputStream dOS) throws IOException {
+        throw new UnsupportedOperationException("This should never be thrown.");
+    }
+
+    public final byte getPacketType() {
         return packetType;
     }
 
-    public Long getSentID() {
+    public final Long getSentID() {
         return sentID;
     }
 }

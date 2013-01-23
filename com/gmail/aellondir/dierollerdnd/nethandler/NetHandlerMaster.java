@@ -65,7 +65,7 @@ public class NetHandlerMaster extends NetHandler {
         return true;
     }
 
-    protected void connectionAccepted(Socket socket, ConnectPacket cP) {
+    protected void connectionAccepted(Socket socket, HandshakePacket cP) {
         if (!pHandler.isAlive()) {
             pHandler.start();
         }
