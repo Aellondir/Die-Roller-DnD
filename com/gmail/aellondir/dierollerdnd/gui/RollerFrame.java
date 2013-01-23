@@ -21,11 +21,10 @@ public class RollerFrame extends JFrame {
      * Dynamicly cast to either slave or master when necessary,
      * simple overriden method call for figuring out which is which.
      */
-    private NetHandler nH;
 
+    private NetHandler nH;
     private static RollerFrame rF;
     private ResourceBundle bundle;
-
     private JPanel[] jPanelArr;
     private JComboBox jCBDice;
     private JComboBox jCBPlayers;
@@ -45,9 +44,23 @@ public class RollerFrame extends JFrame {
     private JMenuItem[] jMIWindowArr;
 
     public static void main(String args[]) {
-        rF = new RollerFrame();
+        if (System.getProperty("os.name").equals("Mac OS X")) {
+            try {
+                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Die Roller");
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException | IllegalAccessException |
+                    InstantiationException | UnsupportedLookAndFeelException e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
-        rF.setVisible(true);
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new RollerFrame().setVisible(true);
+            }
+        });
     }
 
     public RollerFrame() {
@@ -211,11 +224,12 @@ public class RollerFrame extends JFrame {
     private void addListeners() {
     }
 
-
     public void updateJCB() {
         jCBPlayers.removeAllItems();
 
-        for (String str:((NetHandlerMaster) nH).getUsernames()) {
+        jCBPlayers.addItem("--");
+
+        for (String str : ((NetHandlerMaster) nH).getUsernames()) {
             jCBPlayers.addItem(str);
         }
     }

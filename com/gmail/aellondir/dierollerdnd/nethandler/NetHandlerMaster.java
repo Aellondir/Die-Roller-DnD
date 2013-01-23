@@ -5,7 +5,7 @@ import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
-import java.util.Calendar;
+import java.util.TreeSet;
 
 /**
  * Handles the master side of the relationship between die rollers.
@@ -26,7 +26,7 @@ public class NetHandlerMaster extends NetHandler {
         super("MASTER", passWord);
         this.expectedConnections = expectedConnections;
         pHandler = new PacketHandler();
-        conPl = new HashMap<>();
+        conPl = new HashMap<>(expectedConnections);
 
         try {
             masSocket = new ServerSocket(0);
@@ -50,17 +50,10 @@ public class NetHandlerMaster extends NetHandler {
         this.setDaemon(true);
     }
 
-    public String[] getUsernames() {
-        String[] unArr = new String[conPl.size()];
-        int i = 0;
+    public TreeSet<String> getUsernames() {
+        TreeSet<String> unTSet = new TreeSet<>(conPl.keySet());
 
-        for (ConnectedPlayer cP : conPl.values()) {
-            unArr[i] = cP.getUN(false);
-
-            i++;
-        }
-
-        return unArr;
+        return unTSet;
     }
 
     public InetAddress getAddress() {
@@ -88,7 +81,7 @@ public class NetHandlerMaster extends NetHandler {
 
                 while (conPl.containsKey(preFixStr)) {
                     preFixChar++;
-                    preFixStr = preFixChar + cP.getUnTrunc();
+                    preFixStr = Integer.toString(preFixChar) + cP.getUnTrunc();
                 }
 
                 boolean isUnSim = conPl.get(cP.getUnTrunc()).getUN(false).equals(cP.getUnFull());
@@ -101,7 +94,7 @@ public class NetHandlerMaster extends NetHandler {
 
                 while (conPl.containsKey(preFixStr)) {
                     preFixChar++;
-                    preFixStr = preFixChar + cP.getUnFull();
+                    preFixStr = Integer.toString(preFixChar) + cP.getUnFull();
                 }
 
                 conPl.put(preFixStr, new ConnectedPlayer(socket, cP.isUnTrunc(), cP.getUnFull(), Integer.toString(preFixChar).charAt(0), true));
@@ -113,6 +106,8 @@ public class NetHandlerMaster extends NetHandler {
         }
 
         conPl.get(cP.getUnTrunc()).start();
+
+        getFrame().updateJCB();
     }
 
     protected void connectionDenied(Socket socket) {
@@ -132,8 +127,10 @@ public class NetHandlerMaster extends NetHandler {
             } catch (final IOException e) {
                 try {
                     masSocket.close();
+
+                    masSocket = null;
                 } catch (final IOException e1) {
-                    getFrame().errorScreen(e);
+                    getFrame().errorScreen(e1);
                 }
 
                 getFrame().errorScreen(e);
