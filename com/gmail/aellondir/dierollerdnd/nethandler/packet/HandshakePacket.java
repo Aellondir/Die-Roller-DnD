@@ -54,6 +54,8 @@ public class HandshakePacket extends Packet {
         dOS.writeUTF(unTrunc);
         dOS.writeUTF(unFull);
         dOS.writeBoolean(isUnTrunc);
+
+        dOS.flush();
     }
 
     public boolean isUnTrunc() {

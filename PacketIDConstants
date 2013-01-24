@@ -14,3 +14,5 @@
 67=MultiResultPacket
 68=MultiResultEndPacket
 69=ChatPacket
+70=KickPacket
+

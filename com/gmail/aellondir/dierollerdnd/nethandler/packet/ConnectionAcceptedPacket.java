@@ -28,5 +28,7 @@ public class ConnectionAcceptedPacket extends Packet {
     public void processSendPacket(DataOutputStream dOS) throws IOException {
         dOS.write(packetType);
         dOS.writeLong(sentID);
+
+        dOS.flush();
     }
 }

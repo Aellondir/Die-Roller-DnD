@@ -29,13 +29,15 @@ public class AuthenticateConnection extends Thread {
             byte packetType = dIS.readByte();
 
             if (packetType != 1) {
-
                 nHM.connectionDenied(socket);
             }
 
             HandshakePacket cP = HandshakePacket.processReadPacket(dIS);
 
             if (nHM.getPW().equals(cP.getpW())) {
+                //Dialogue to ask the GM what he wants to do. Deny or Accept. if yes passes through to the connection accepted method
+                //if no then a connection denied packet is sent to the offending player.
+
                 nHM.connectionAccepted(socket, cP);
             } else {
                 nHM.connectionDenied(socket);
@@ -43,5 +45,7 @@ public class AuthenticateConnection extends Thread {
         } catch (final IOException e) {
             getFrame().errorScreen(e);
         }
+
+
     }
 }
