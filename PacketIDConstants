@@ -12,4 +12,5 @@
 65=RollDicePacket
 66=ResultPacket
 67=MultiResultPacket
-68=ChatPacket
+68=MultiResultEndPacket
+69=ChatPacket

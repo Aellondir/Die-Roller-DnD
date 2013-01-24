@@ -1,19 +1,20 @@
 package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 
 import java.io.*;
+import java.util.TreeSet;
 
 /**
  *
  * @author James Hull
- * @serial JPGH.0001 class 6 Subclass 9
+ * @serial JPGH.0001 class 6 Subclass 8
  * @version 0.01
  */
-public class ChatPacket extends Packet {
+public class NewPlayerPacket extends Packet {
 
-    public ChatPacket(long sentID) {
-        super((byte) 69, sentID);
+    private NewPlayerPacket(long sentID) {
+        super((byte) 64, sentID);
     }
-
+    
     public static Packet packetFactory() {
         //@todo Implementation
     }

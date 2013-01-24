@@ -113,6 +113,10 @@ public class NetHandlerMaster extends NetHandler {
     protected void connectionDenied(Socket socket) {
     }
 
+    private void sendAllPlayers() {
+        
+    }
+
     @Override
     public void run() {
         int keepAlive = 0;

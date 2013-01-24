@@ -5,7 +5,7 @@ import java.io.*;
 /**
  *
  * @author James Hull
- * @serial JPGH.0001 abst class 2 implementation 2
+ * @serial JPGH.0001 class 6 Subclass 2
  * @version 0.01
  */
 public class ConnectionAcceptedPacket extends Packet {

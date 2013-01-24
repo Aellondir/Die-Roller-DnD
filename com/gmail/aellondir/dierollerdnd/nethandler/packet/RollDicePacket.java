@@ -5,12 +5,25 @@ import java.io.*;
 /**
  *
  * @author James Hull
- * @serial JPGH.0001 abst class 2 implementation 7
+ * @serial JPGH.0001 class 6 Subclass 7
  * @version 0.01
  */
 public class RollDicePacket extends Packet {
 
     public RollDicePacket(long sentID) {
-        super((byte) 4, sentID);
+        super((byte) 65, sentID);
+    }
+
+    public static Packet packetFactory() {
+        //@todo Implementation
+    }
+
+    public static Packet processReadPacket(DataInputStream dIS) throws IOException {
+        //@todo Implementation
+    }
+
+    @Override
+    public void processSendPacket(DataOutputStream dOS) throws IOException {
+
     }
 }

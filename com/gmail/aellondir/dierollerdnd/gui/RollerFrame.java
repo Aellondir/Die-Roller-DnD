@@ -23,6 +23,7 @@ public class RollerFrame extends JFrame {
      */
 
     private NetHandler nH;
+    private boolean isNonGMClient = true;
     private static RollerFrame rF;
     private ResourceBundle bundle;
     private JPanel[] jPanelArr;

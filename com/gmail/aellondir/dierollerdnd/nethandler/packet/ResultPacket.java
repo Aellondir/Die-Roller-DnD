@@ -5,12 +5,25 @@ import java.io.*;
 /**
  *
  * @author James Hull
- * @serial JPGH.0001 abst class 2 implementation 6
+ * @serial JPGH.0001 class 6 Subclass 6
  * @version 0.01
  */
 public class ResultPacket extends Packet {
 
     public ResultPacket(long sentID) {
-        super((byte) 5, sentID);
+        super((byte) 66, sentID);
+    }
+
+    public static Packet packetFactory() {
+        //@todo Implementation
+    }
+
+    public static Packet processReadPacket(DataInputStream dIS) throws IOException {
+        //@todo Implementation
+    }
+
+    @Override
+    public void processSendPacket(DataOutputStream dOS) throws IOException {
+
     }
 }

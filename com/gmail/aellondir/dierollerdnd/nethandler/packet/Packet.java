@@ -6,10 +6,10 @@ import java.io.*;
  *Defines the basic operation and architecture of any number of packets.
  *
  * @author James Hull
- * @serial JPGH.0001 abst class 2
+ * @serial JPGH.0001 class 6
  * @version 0.01
  */
-public abstract class Packet {
+public class Packet {
     protected byte packetType = 0;
     protected long sentID;
 

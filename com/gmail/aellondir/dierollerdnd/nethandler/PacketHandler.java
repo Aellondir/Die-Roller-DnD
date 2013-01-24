@@ -8,6 +8,8 @@ import java.util.PriorityQueue;
 /**
  *
  * @author jameshull
+ * @serial JPGH.0001 class 5
+ * @version 0.01
  */
 public class PacketHandler extends Thread {
 

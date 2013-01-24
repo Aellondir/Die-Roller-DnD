@@ -1,5 +1,6 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
+import static com.gmail.aellondir.dierollerdnd.gui.RollerFrame.getFrame;
 import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -49,6 +50,24 @@ public class ConnectedPlayer extends Thread {
         } else {
             return unFull;
         }
+    }
+
+    public void sendConnectionAcceptedPacket() {
+        ConnectionAcceptedPacket cAP;
+
+        cAP = ConnectionAcceptedPacket.packetFactory(sentID);
+
+        try {
+            cAP.processSendPacket(pDOS);
+        } catch (IOException e) {
+            getFrame().errorScreen(e);
+        }
+
+        sentID += 1;
+    }
+
+    public void sendNewPlayerPacket(String nUn) {
+        //@todo send dat packet
     }
 
     private String getTruncUN() {
