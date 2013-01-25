@@ -2,7 +2,6 @@ package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 
 import java.io.*;
 import java.util.TreeSet;
-import java.util.Iterator;
 
 /**
  *

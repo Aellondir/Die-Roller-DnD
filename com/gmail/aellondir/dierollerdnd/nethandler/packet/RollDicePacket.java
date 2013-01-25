@@ -1,5 +1,6 @@
 package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 
+import com.gmail.aellondir.dierollerdnd.enumerations.DiceDefinitions;
 import java.io.*;
 
 /**
@@ -9,21 +10,35 @@ import java.io.*;
  * @version 0.01
  */
 public class RollDicePacket extends Packet {
+    private short numTRoll = 0;
+    private DiceDefinitions dTR = DiceDefinitions.D100;
 
-    public RollDicePacket(long sentID) {
+    public RollDicePacket(long sentID, short numTRoll, DiceDefinitions dTR) {
         super((byte) 65, sentID);
+
+        this.numTRoll = numTRoll;
+        this.dTR = dTR;
     }
 
-    public static Packet packetFactory() {
+    public static RollDicePacket packetFactory() {
         //@todo Implementation
     }
 
-    public static Packet processReadPacket(DataInputStream dIS) throws IOException {
-        //@todo Implementation
+    public static RollDicePacket processReadPacket(DataInputStream dIS) throws IOException {
+        long sentIDR = dIS.readLong();
+        short numTRoll = dIS.readShort();
+
+
     }
 
     @Override
     public void processSendPacket(DataOutputStream dOS) throws IOException {
+        dOS.writeByte(packetType);
+        dOS.writeLong(sentID);
 
+        dOS.writeShort(numTRoll);
+        dOS.writeInt(dTR.ordinal());
+
+        dOS.flush();
     }
 }

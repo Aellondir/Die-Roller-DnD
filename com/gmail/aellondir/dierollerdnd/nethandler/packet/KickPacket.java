@@ -8,7 +8,7 @@ public class KickPacket extends Packet {
     private byte index = 0;
     private String gMDefinedReason = null;
 
-    public KickPacket(long sentID, byte reason, String gMDefinedReason) {
+    private KickPacket(long sentID, byte reason, String gMDefinedReason) {
         super((byte) 70, sentID);
 
         //if gMDefinedReason is not null this will still be sent and kept it just won't be used.
