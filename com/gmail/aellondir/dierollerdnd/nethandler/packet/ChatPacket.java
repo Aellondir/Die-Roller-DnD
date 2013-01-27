@@ -16,11 +16,8 @@ public class ChatPacket extends Packet {
         super((byte) 69, sentID);
 
         if (message.length() > 160) {
-            this.message = "";
-
-            for (int i = 0; i < 160; i++) {
-                this.message += message.charAt(i);
-            }
+            
+            this.message = message.substring(0, 160);
         } else {
             this.message = message;
         }
