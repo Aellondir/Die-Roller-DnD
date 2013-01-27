@@ -10,48 +10,56 @@ import java.util.Iterator;
  * @version 0.01
  */
 public class MultiResultsPacket extends Packet {
+
     private byte[] resultsArr = null;
     private boolean endOfSent = true;
-
     private byte[] resultsArrRemainder = null;
 
-    private MultiResultsPacket(long sentID, byte[] resultsArr) {
+    private MultiResultsPacket(long sentID, byte[] resultsArr, boolean end) {
         super((byte) 67, sentID);
 
-        if (resultsArr.length > 191) {
-            this.resultsArr = new byte[191];
-
-            System.arraycopy(resultsArr, 0, this.resultsArr, 0, 191);
-
-            resultsArrRemainder = new byte[resultsArr.length - 191];
-
-            System.arraycopy(resultsArr, 191, resultsArrRemainder, 0, resultsArr.length);
-
-            endOfSent = false;
-        } else {
-            this.resultsArr = resultsArr;
-        }
-    }
-
-    private MultiResultsPacket(long sentID, byte[] resultsArr, boolean end) {
-        this(sentID, resultsArr);
+        this.resultsArr = resultsArr;
 
         endOfSent = end;
     }
 
-    public static MultiResultsPacket packetFactory(long sentID, byte[] resultsArr) {
-        return new MultiResultsPacket(sentID, resultsArr);
-    }
+    public static MultiResultsPacket packetFactory(long sentID, byte[] resultsArr, boolean end) {
+        if (resultsArr.length < 191) {
+            MultiResultsPacket packet;
+            byte[] resultsArrF;
+            boolean endI;
 
-    private static MultiResultsPacket packetFactory(long sentID, byte[] resultsArr, boolean end) {
-        return new MultiResultsPacket(sentID, resultsArr, end);
+            if (resultsArr.length > 191) {
+                resultsArrF = new byte[191];
+
+                System.arraycopy(resultsArr, 0, resultsArrF, 0, 191);
+
+                end = false;
+            } else {
+                resultsArrF = resultsArr;
+
+                end = true;
+            }
+
+            packet = new MultiResultsPacket(sentID, resultsArrF, end);
+
+            if (end == false) {
+                packet.setResultsArrRemainder(resultsArr.length - 191);
+
+                System.arraycopy(resultsArr, 191, packet.getResultsArrRemainder(), 0, resultsArr.length);
+            }
+
+            return packet;
+        } else {
+            return new MultiResultsPacket(sentID, resultsArr, end);
+        }
     }
 
     public static MultiResultsPacket processReadPacket(DataInputStream dIS) throws IOException {
         long sentIDR = dIS.readLong();
         int numBytes = dIS.readInt();
 
-        byte [] resArrR = new byte[numBytes];
+        byte[] resArrR = new byte[numBytes];
 
         for (int i = 0; i < numBytes; i++) {
             resArrR[i] = dIS.readByte();
@@ -68,7 +76,7 @@ public class MultiResultsPacket extends Packet {
         dOS.writeLong(sentID);
         dOS.writeInt(resultsArr.length);
 
-        for (byte b: resultsArr) {
+        for (byte b : resultsArr) {
             dOS.writeByte(b);
         }
 
@@ -89,7 +97,7 @@ public class MultiResultsPacket extends Packet {
         return resultsArrRemainder;
     }
 
-    private void setEnd(boolean end) {
-        endOfSent = end;
+    private void setResultsArrRemainder(int indices) {
+        resultsArrRemainder = new byte[indices];
     }
 }
