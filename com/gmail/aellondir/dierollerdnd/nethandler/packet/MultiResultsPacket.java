@@ -1,7 +1,6 @@
 package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 
 import java.io.*;
-import java.util.Iterator;
 
 /**
  *
@@ -24,30 +23,22 @@ public class MultiResultsPacket extends Packet {
     }
 
     public static MultiResultsPacket packetFactory(long sentID, byte[] resultsArr, boolean end) {
-        if (resultsArr.length < 191) {
+        if (resultsArr.length > 191) {
             MultiResultsPacket packet;
             byte[] resultsArrF;
             boolean endI;
 
-            if (resultsArr.length > 191) {
-                resultsArrF = new byte[191];
+            resultsArrF = new byte[191];
 
-                System.arraycopy(resultsArr, 0, resultsArrF, 0, 191);
+            System.arraycopy(resultsArr, 0, resultsArrF, 0, 191);
 
-                end = false;
-            } else {
-                resultsArrF = resultsArr;
+            endI = false;
 
-                end = true;
-            }
+            packet = new MultiResultsPacket(sentID, resultsArrF, endI);
 
-            packet = new MultiResultsPacket(sentID, resultsArrF, end);
+            packet.setResultsArrRemainder(resultsArr.length - 191);
 
-            if (end == false) {
-                packet.setResultsArrRemainder(resultsArr.length - 191);
-
-                System.arraycopy(resultsArr, 191, packet.getResultsArrRemainder(), 0, resultsArr.length);
-            }
+            System.arraycopy(resultsArr, 191, packet.getResultsArrRemainder(), 0, resultsArr.length - 191);
 
             return packet;
         } else {
