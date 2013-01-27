@@ -10,20 +10,43 @@ import java.io.*;
  */
 public class ChatPacket extends Packet {
 
-    public ChatPacket(long sentID) {
+    private String message = null;
+
+    private ChatPacket(long sentID, String message) {
         super((byte) 69, sentID);
+
+        if (message.length() > 160) {
+            this.message = "";
+
+            for (int i = 0; i < 160; i++) {
+                this.message += message.charAt(i);
+            }
+        } else {
+            this.message = message;
+        }
     }
 
-    public static Packet packetFactory() {
-        //@todo Implementation
+    public static Packet packetFactory(long sentID, String message) {
+        return new ChatPacket(sentID, message);
     }
 
     public static Packet processReadPacket(DataInputStream dIS) throws IOException {
-        //@todo Implementation
+        long sentIDR = dIS.readLong();
+        String messageR = dIS.readUTF();
+
+        return ChatPacket.packetFactory(sentIDR, messageR);
     }
 
     @Override
     public void processSendPacket(DataOutputStream dOS) throws IOException {
+        dOS.writeByte(packetType);
+        dOS.writeLong(sentID);
+        dOS.writeUTF(message);
 
+        dOS.flush();
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

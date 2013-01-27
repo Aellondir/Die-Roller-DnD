@@ -53,4 +53,5 @@ public abstract class NetHandler extends Thread {
 
     public abstract boolean isMaster();
 
+    public abstract void shutDown();
 }

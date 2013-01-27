@@ -23,4 +23,9 @@ public class NetHandlerSlave extends NetHandler {
     public boolean isMaster() {
         return false;
     }
+
+    @Override
+    public void shutDown() {
+        //@todo shutdown methodology.
+    }
 }

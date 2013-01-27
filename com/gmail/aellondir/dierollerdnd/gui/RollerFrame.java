@@ -265,6 +265,19 @@ public class RollerFrame extends JFrame {
         this.pack();
     }
 
+    @Override
+    protected void processWindowEvent(WindowEvent e) {
+        super.processWindowEvent(e);
+
+        if (e.getNewState() == WindowEvent.WINDOW_CLOSED) {
+            //call a shutdown method for all threads, as well as make good faith efforts to disconnect and close all sockets and, free up all system resources.
+            //This will be called by an abstract method from NetHandler.java, which in turn will be overriden in each of the other subclasses to shut down
+            //threads etc.
+        }
+    }
+
+
+
     public static RollerFrame getFrame() {
         return rF;
     }

@@ -65,6 +65,11 @@ public class NetHandlerMaster extends NetHandler {
         return true;
     }
 
+    @Override
+    public void shutDown() {
+        //@todo shutdown methodology.
+    }
+
     protected void connectionAccepted(Socket socket, HandshakePacket cP) {
         if (!pHandler.isAlive()) {
             pHandler.start();
@@ -114,7 +119,7 @@ public class NetHandlerMaster extends NetHandler {
     }
 
     private void sendAllPlayers() {
-        
+
     }
 
     @Override
