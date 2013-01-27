@@ -3,9 +3,10 @@ package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 import java.io.*;
 
 public class PlayerChangePacket extends Packet {
-     private int playerIndex = 0;
-     private String un = null;
-     private boolean remove = false;
+
+    private int playerIndex = 0;
+    private String un = null;
+    private boolean remove = false;
 
     private PlayerChangePacket(long sentID, int playerIndex, String un) {
         super((byte) 71, sentID);
@@ -25,7 +26,7 @@ public class PlayerChangePacket extends Packet {
     public static PlayerChangePacket processReadPacket(DataInputStream dIS) throws IOException {
         long sentIDR = dIS.readLong();
         String unR = null;
-        byte playerIndexR = 0;
+        byte playerIndexR;
 
         if (dIS.readBoolean()) {
             unR = dIS.readUTF();
@@ -52,5 +53,17 @@ public class PlayerChangePacket extends Packet {
         dOS.writeByte(playerIndex);
 
         dOS.flush();
+    }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public String getUn() {
+        return un;
+    }
+
+    public boolean isRemove() {
+        return remove;
     }
 }

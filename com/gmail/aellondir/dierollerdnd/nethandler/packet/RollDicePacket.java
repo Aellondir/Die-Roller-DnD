@@ -10,25 +10,35 @@ import java.io.*;
  * @version 0.01
  */
 public class RollDicePacket extends Packet {
+
     private short numTRoll = 0;
     private DiceDefinitions dTR = DiceDefinitions.D100;
 
-    public RollDicePacket(long sentID, short numTRoll, DiceDefinitions dTR) {
+    private RollDicePacket(long sentID, short numTRoll, DiceDefinitions dTR) {
         super((byte) 65, sentID);
 
         this.numTRoll = numTRoll;
         this.dTR = dTR;
     }
 
-    public static RollDicePacket packetFactory() {
-        //@todo Implementation
+    public static RollDicePacket packetFactory(long sentID, short numTRoll, DiceDefinitions dTR) {
+        return new RollDicePacket(sentID, numTRoll, dTR);
+    }
+
+    public short getNumTRoll() {
+        return numTRoll;
+    }
+
+    public DiceDefinitions getdTR() {
+        return dTR;
     }
 
     public static RollDicePacket processReadPacket(DataInputStream dIS) throws IOException {
         long sentIDR = dIS.readLong();
-        short numTRoll = dIS.readShort();
+        short numTRollR = dIS.readShort();
+        DiceDefinitions dTR = DiceDefinitions.values()[dIS.readInt()];
 
-
+        return RollDicePacket.packetFactory(sentIDR, numTRollR, dTR);
     }
 
     @Override

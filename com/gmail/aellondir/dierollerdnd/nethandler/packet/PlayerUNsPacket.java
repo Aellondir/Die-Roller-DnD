@@ -10,6 +10,7 @@ import java.util.TreeSet;
  * @version 0.01
  */
 public class PlayerUNsPacket extends Packet {
+
     private TreeSet<String> usernamesAlpha;
 
     private PlayerUNsPacket(long sentID, TreeSet<String> usernamesAlpha) {
@@ -24,10 +25,6 @@ public class PlayerUNsPacket extends Packet {
         }
 
         return new PlayerUNsPacket(sentID, usernamesAlpha);
-    }
-
-    public TreeSet<String> getUsernamesAlpha() {
-        return usernamesAlpha;
     }
 
     public static PlayerUNsPacket processReadPacket(DataInputStream dIS) throws IOException {
@@ -52,13 +49,13 @@ public class PlayerUNsPacket extends Packet {
 
     @Override
     public void processSendPacket(DataOutputStream dOS) throws IOException {
-        dOS.write(packetType);
+        dOS.writeByte(packetType);
         dOS.writeLong(sentID);
         dOS.writeInt(usernamesAlpha.size());
 
         int i = 0;
 
-        for (String str: usernamesAlpha) {
+        for (String str : usernamesAlpha) {
             dOS.writeUTF(str);
 
             i++;
@@ -71,5 +68,9 @@ public class PlayerUNsPacket extends Packet {
         }
 
         dOS.flush();
+    }
+
+    public TreeSet<String> getUsernamesAlpha() {
+        return usernamesAlpha;
     }
 }

@@ -9,6 +9,7 @@ import java.io.*;
  * @version 0.01
  */
 public class OutOfSyncPacket extends Packet {
+
     private long receivedID = 0L;
     private long expectedID = 0L;
 
@@ -17,14 +18,6 @@ public class OutOfSyncPacket extends Packet {
 
         this.receivedID = receivedID;
         this.expectedID = expectedID;
-    }
-
-    public long getExpectedID() {
-        return expectedID;
-    }
-
-    public long getReceivedID() {
-        return receivedID;
     }
 
     public static OutOfSyncPacket packetFactory(long sentID, long receivedID, long expectedID) {
@@ -45,5 +38,15 @@ public class OutOfSyncPacket extends Packet {
         dOS.writeLong(sentID);
         dOS.writeLong(receivedID);
         dOS.writeLong(expectedID);
+
+        dOS.flush();
+    }
+
+    public long getExpectedID() {
+        return expectedID;
+    }
+
+    public long getReceivedID() {
+        return receivedID;
     }
 }

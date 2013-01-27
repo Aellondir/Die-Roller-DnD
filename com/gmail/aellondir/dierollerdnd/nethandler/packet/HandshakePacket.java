@@ -9,6 +9,7 @@ import java.io.*;
  * @version 0.01
  */
 public class HandshakePacket extends Packet {
+
     private boolean isUnTrunc = false;
     private String unTrunc;
     private String unFull;

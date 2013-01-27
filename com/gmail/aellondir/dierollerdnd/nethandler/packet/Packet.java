@@ -3,13 +3,14 @@ package com.gmail.aellondir.dierollerdnd.nethandler.packet;
 import java.io.*;
 
 /**
- *Defines the basic operation and architecture of any number of packets.
+ * Defines the basic operation and architecture of any number of packets.
  *
  * @author James Hull
  * @serial JPGH.0001 class 6
  * @version 0.01
  */
 public class Packet {
+
     protected byte packetType = 0;
     protected long sentID;
 

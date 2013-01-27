@@ -9,16 +9,13 @@ import java.io.*;
  * @version 0.01
  */
 public class ConnectionDeniedPacket extends Packet {
+
     private final String[] REASON_ARRAY = {"Because fuck you thats why!", "Y U NO ENTER CORRECT PASSWORD", "The GM dislikes you."};
     private int index = 0;
 
     private ConnectionDeniedPacket(long sentID, int reason) {
         super((byte) 2, sentID);
         this.index = reason;
-    }
-
-    public String getReason() {
-        return REASON_ARRAY[index];
     }
 
     public static ConnectionDeniedPacket packetFactory(long sentID, int reason) {
@@ -34,9 +31,13 @@ public class ConnectionDeniedPacket extends Packet {
 
     @Override
     public void processSendPacket(DataOutputStream dOS) throws IOException {
-        dOS.write(packetType);
+        dOS.writeByte(packetType);
         dOS.writeLong(sentID);
 
         dOS.flush();
+    }
+
+    public String getReason() {
+        return REASON_ARRAY[index];
     }
 }

@@ -17,14 +17,6 @@ public class KickPacket extends Packet {
         this.gMDefinedReason = gMDefinedReason;
     }
 
-    public String getReason() {
-        if (gMDefinedReason == null) {
-            return REASON_ARRAY[index];
-        } else {
-            return gMDefinedReason;
-        }
-    }
-
     public static KickPacket packetFactory(long sentID, byte reason, String gMDefinedReason) {
         return new KickPacket(sentID, reason, gMDefinedReason);
     }
@@ -37,7 +29,7 @@ public class KickPacket extends Packet {
         if (dIS.readBoolean()) {
             gMDefReason = dIS.readUTF();
         }
-            reasonR = dIS.readByte();
+        reasonR = dIS.readByte();
 
 
         return KickPacket.packetFactory(sentIDR, reasonR, gMDefReason);
@@ -45,7 +37,7 @@ public class KickPacket extends Packet {
 
     @Override
     public void processSendPacket(DataOutputStream dOS) throws IOException {
-        dOS.write(packetType);
+        dOS.writeByte(packetType);
         dOS.writeLong(sentID);
 
         if (gMDefinedReason != null) {
@@ -56,8 +48,16 @@ public class KickPacket extends Packet {
             dOS.writeBoolean(false);
         }
 
-            dOS.writeByte(index);
+        dOS.writeByte(index);
 
         dOS.flush();
+    }
+
+    public String getReason() {
+        if (gMDefinedReason == null) {
+            return REASON_ARRAY[index];
+        } else {
+            return gMDefinedReason;
+        }
     }
 }

@@ -10,20 +10,33 @@ import java.io.*;
  */
 public class ResultPacket extends Packet {
 
-    public ResultPacket(long sentID) {
+    private byte result = 0;
+
+    private ResultPacket(long sentID, byte result) {
         super((byte) 66, sentID);
+
+        this.result = result;
     }
 
-    public static Packet packetFactory() {
-        //@todo Implementation
+    public static Packet packetFactory(long sentID, byte result) {
+        return new ResultPacket(sentID, result);
+    }
+
+    public byte getResult() {
+        return result;
     }
 
     public static Packet processReadPacket(DataInputStream dIS) throws IOException {
-        //@todo Implementation
+        long sentIDR = dIS.readLong();
+        byte resultR = dIS.readByte();
+
+        return ResultPacket.packetFactory(sentIDR, resultR);
     }
 
     @Override
     public void processSendPacket(DataOutputStream dOS) throws IOException {
-
+        dOS.writeByte(packetType);
+        dOS.writeLong(sentID);
+        dOS.writeByte(result);
     }
 }
