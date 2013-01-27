@@ -97,8 +97,7 @@ public class RollerFrame extends JFrame {
         jPanelArr[4] = new JPanel();
         jPanelArr[5] = new JPanel();
         jPanelArr[6] = new JPanel();
-
-        jPanelArr[0].setBackground(new java.awt.Color(204, 255, 255));
+        
         jPanelArr[0].setLayout(new GridLayout(2, 2));
 
         jPanelArr[1].add(jTF0); //num dice
@@ -135,8 +134,6 @@ public class RollerFrame extends JFrame {
                 throw new UnsupportedOperationException("No Idea how this happened what did we do?");
             }
 
-            jPanelArr[i].setBackground(jPanelArr[0].getBackground());
-
             jPanelArr[0].add(jPanelArr[i]);
         }
 
@@ -151,7 +148,6 @@ public class RollerFrame extends JFrame {
         jPanelArr[6].setLayout(new GridLayout(2, 1));
         jPanelArr[6].add(jCBPlayers);
         jPanelArr[6].add(jSP2);
-        jPanelArr[6].setBackground(jPanelArr[0].getBackground());
         jPanelArr[6].setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 0, 51)),
                 bundle.getString("RollerFrame.jP6"), TitledBorder.RIGHT, TitledBorder.TRAILING));
@@ -159,9 +155,7 @@ public class RollerFrame extends JFrame {
         jTAMsg.setEditable(true);
         jTAMsg.setLineWrap(true);
         jTAMsg.setWrapStyleWord(true);
-        jSP2.setBackground(jPanelArr[0].getBackground());
 
-        jPanelArr[5].setBackground(jPanelArr[0].getBackground());
         jPanelArr[5].setLayout(new GridBagLayout());
         jPanelArr[5].add(jPanelArr[6]);
         jPanelArr[5].add(jPanelArr[0]);
