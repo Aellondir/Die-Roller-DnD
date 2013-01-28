@@ -31,16 +31,7 @@ public class PacketHandler extends Thread {
         @Override
         public void run() {
             do {
-                while (!prQueue.isEmpty()) {
 
-                    //@todo packet handleing logic.
-                }
-
-                try {
-                    Thread.sleep(250L);
-                } catch (InterruptedException e) {
-                    getFrame().errorScreen(e);
-                }
             } while (run);
         }
     }
