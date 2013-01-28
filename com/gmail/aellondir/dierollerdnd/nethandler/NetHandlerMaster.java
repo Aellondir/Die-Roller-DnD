@@ -119,7 +119,6 @@ public class NetHandlerMaster extends NetHandler {
     }
 
     private void sendAllPlayers() {
-
     }
 
     @Override

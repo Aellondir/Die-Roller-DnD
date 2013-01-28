@@ -10,7 +10,17 @@ import java.io.*;
  * @version 0.01
  */
 public class Packet {
-
+    /****************************************************************************
+     * PAY ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * @TODO Make no arg constructors IN ALL of the packet subclasses the only
+     * thing they will do is the packet type. THEN CHANGE ALL INSTANCES OF THE
+     * PROCESS READ PACKET METHOD TO NON-STATIC, AND PLACE AN ABSTRACT METHOD FOR
+     * IT IN THIS CLASS!
+     *
+     * IF YA SMEEEEEEEEEELL WHAT THE PRE-BEDTIME GUY IS COOKING!
+     *
+     * Foley is god, Ditka can suck my dick-ah.
+     */
     protected byte packetType = 0;
     protected long sentID;
 

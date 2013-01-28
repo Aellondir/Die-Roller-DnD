@@ -11,27 +11,31 @@ import java.io.*;
 public class ChatPacket extends Packet {
 
     private String message = null;
+    private String recipient = null;
 
-    private ChatPacket(long sentID, String message) {
+    private ChatPacket(long sentID, String message, String recipient) {
         super((byte) 69, sentID);
 
         if (message.length() > 160) {
-            
+
             this.message = message.substring(0, 160);
         } else {
             this.message = message;
         }
+
+        this.recipient = recipient;
     }
 
-    public static Packet packetFactory(long sentID, String message) {
-        return new ChatPacket(sentID, message);
+    public static Packet packetFactory(long sentID, String message, String recipient) {
+        return new ChatPacket(sentID, message, recipient);
     }
 
     public static Packet processReadPacket(DataInputStream dIS) throws IOException {
         long sentIDR = dIS.readLong();
         String messageR = dIS.readUTF();
+        String recipient = dIS.readUTF();
 
-        return ChatPacket.packetFactory(sentIDR, messageR);
+        return ChatPacket.packetFactory(sentIDR, messageR, recipient);
     }
 
     @Override
@@ -39,6 +43,7 @@ public class ChatPacket extends Packet {
         dOS.writeByte(packetType);
         dOS.writeLong(sentID);
         dOS.writeUTF(message);
+        dOS.writeUTF(recipient);
 
         dOS.flush();
     }
