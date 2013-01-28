@@ -12,7 +12,7 @@ public class OutOfSyncPacket extends Packet {
 
     private long receivedID = 0L;
     private long expectedID = 0L;
-
+    
     private OutOfSyncPacket(long sentID, long receivedID, long expectedID) {
         super((byte) -128, sentID);
 

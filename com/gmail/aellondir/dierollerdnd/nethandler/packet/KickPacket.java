@@ -24,7 +24,7 @@ public class KickPacket extends Packet {
     public static KickPacket processReadPacket(DataInputStream dIS) throws IOException {
         long sentIDR = dIS.readLong();
         String gMDefReason = null;
-        byte reasonR = 0;
+        byte reasonR;
 
         if (dIS.readBoolean()) {
             gMDefReason = dIS.readUTF();

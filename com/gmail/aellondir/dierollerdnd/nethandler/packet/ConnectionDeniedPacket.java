@@ -14,7 +14,7 @@ public class ConnectionDeniedPacket extends Packet {
     private int index = 0;
 
     private ConnectionDeniedPacket(long sentID, int reason) {
-        super((byte) 2, sentID);
+        super((byte) 3, sentID);
         this.index = reason;
     }
 
