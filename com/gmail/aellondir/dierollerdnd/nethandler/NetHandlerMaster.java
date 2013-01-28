@@ -50,10 +50,10 @@ public class NetHandlerMaster extends NetHandler {
         this.setDaemon(true);
     }
 
-    public TreeSet<String> getUsernames() {
-        TreeSet<String> unTSet = new TreeSet<>(conPl.keySet());
+    public synchronized TreeSet<String> getUsernames() {
+            TreeSet<String> unTSet = new TreeSet<>(conPl.keySet());
 
-        return unTSet;
+            return unTSet;
     }
 
     public InetAddress getAddress() {
@@ -70,7 +70,7 @@ public class NetHandlerMaster extends NetHandler {
         //@todo shutdown methodology.
     }
 
-    protected void connectionAccepted(Socket socket, HandshakePacket cP) {
+    protected synchronized void connectionAccepted(Socket socket, HandshakePacket cP) {
         if (!pHandler.isAlive()) {
             pHandler.start();
         }
@@ -118,7 +118,7 @@ public class NetHandlerMaster extends NetHandler {
     protected void connectionDenied(Socket socket) {
     }
 
-    private void sendAllPlayers() {
+    private synchronized void sendAllPlayers() {
     }
 
     @Override
