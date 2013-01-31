@@ -16,14 +16,17 @@ import java.net.*;
 public class ConnectedPlayer extends Thread {
     private Socket pSocket;
     private String unFull;
-    private char simTUn;
+
     private DataInputStream pDIS;
     private DataOutputStream pDOS;
-    private static long receivedID = 0L;
-    private static long sentID = 0L;
-    private boolean connected;
-    private boolean isUnTrunc;
-    private boolean isUnSim;
+
+    private PacketHandler playerPH;
+
+    private char simTUn;
+
+    private boolean connected,
+            isUnTrunc,
+            isUnSim;
 
     public ConnectedPlayer(Socket socket, boolean isUnTrunc, String unFull) throws IOException {
         this(socket, isUnTrunc, unFull, '§', false);
@@ -55,15 +58,7 @@ public class ConnectedPlayer extends Thread {
     public void sendConnectionAcceptedPacket() {
         ConnectionAcceptedPacket cAP;
 
-        cAP = ConnectionAcceptedPacket.packetFactory(sentID);
-
-        try {
-            cAP.processSendPacket(pDOS);
-        } catch (IOException e) {
-            getFrame().errorScreen(e);
-        }
-
-        sentID += 1;
+        cAP = ConnectionAcceptedPacket.packetFactory(playerPH.getThenIncSentID());
     }
 
     public void sendNewPlayerPacket(String nUn) {
@@ -98,14 +93,6 @@ public class ConnectedPlayer extends Thread {
 
     public DataOutputStream getPDOS() {
         return pDOS;
-    }
-
-    public static long getReceivedID() {
-        return receivedID;
-    }
-
-    public static long getSentID() {
-        return sentID;
     }
 
     @Override

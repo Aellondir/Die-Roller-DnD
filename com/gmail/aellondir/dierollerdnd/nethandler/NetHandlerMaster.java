@@ -19,13 +19,12 @@ public class NetHandlerMaster extends NetHandler {
     private int expectedConnections;
     private ServerSocket masSocket;
     private InetAddress address;
+    private SendQueue sQ;
     private HashMap<String, ConnectedPlayer> conPl;
-    private PacketHandler pHandler;
 
     public NetHandlerMaster(String passWord, int expectedConnections) {
         super("MASTER", passWord);
         this.expectedConnections = expectedConnections;
-        pHandler = new PacketHandler();
         conPl = new HashMap<>(expectedConnections);
 
         try {
@@ -60,6 +59,10 @@ public class NetHandlerMaster extends NetHandler {
         return address;
     }
 
+    public SendQueue getSQ() {
+        return sQ;
+    }
+
     @Override
     public boolean isMaster() {
         return true;
@@ -71,10 +74,6 @@ public class NetHandlerMaster extends NetHandler {
     }
 
     protected synchronized void connectionAccepted(Socket socket, HandshakePacket cP) {
-        if (!pHandler.isAlive()) {
-            pHandler.start();
-        }
-
         try {
             if (conPl.isEmpty()) {
 
