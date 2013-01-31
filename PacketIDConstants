@@ -8,11 +8,10 @@
 2=ConnectionAcceptedPacket
 3=ConnectionDeniedPacket
 //packetIDConstants 64 -- 127: used for requesting and receiving die rolls.
-64=SendNewPlayerPacket
+64=PlayerUNsPacket
 65=RollDicePacket
 66=ResultPacket
 67=MultiResultPacket
-68=MultiResultEndPacket
-69=ChatPacket
-70=KickPacket
+68=ChatPacket
+69=KickPacket
 

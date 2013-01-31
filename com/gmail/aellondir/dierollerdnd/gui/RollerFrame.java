@@ -1,8 +1,6 @@
 package com.gmail.aellondir.dierollerdnd.gui;
 
 import com.gmail.aellondir.dierollerdnd.enumerations.DiceDefinitions;
-import com.gmail.aellondir.dierollerdnd.nethandler.NetHandler;
-import com.gmail.aellondir.dierollerdnd.nethandler.NetHandlerMaster;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.*;
@@ -22,8 +20,6 @@ public class RollerFrame extends JFrame {
      * simple overriden method call for figuring out which is which.
      */
 
-    private NetHandler nH;
-    private boolean isNonGMClient = true;
     private static RollerFrame rF;
     private ResourceBundle bundle;
     private JPanel[] jPanelArr;
@@ -97,7 +93,7 @@ public class RollerFrame extends JFrame {
         jPanelArr[4] = new JPanel();
         jPanelArr[5] = new JPanel();
         jPanelArr[6] = new JPanel();
-        
+
         jPanelArr[0].setLayout(new GridLayout(2, 2));
 
         jPanelArr[1].add(jTF0); //num dice
@@ -172,6 +168,8 @@ public class RollerFrame extends JFrame {
 
         this.addListeners();
 
+        rF = this;
+
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.pack();
@@ -224,9 +222,9 @@ public class RollerFrame extends JFrame {
 
         jCBPlayers.addItem("--");
 
-        for (String str : ((NetHandlerMaster) nH).getUsernames()) {
-            jCBPlayers.addItem(str);
-        }
+//        for (String str : ((NetHandlerMaster) nH).getUsernames()) {
+//            jCBPlayers.addItem(str);
+//        }
     }
 
     public final void errorScreen(Exception e) {

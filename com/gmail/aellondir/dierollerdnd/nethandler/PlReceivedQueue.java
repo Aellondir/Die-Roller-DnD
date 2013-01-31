@@ -4,6 +4,6 @@ package com.gmail.aellondir.dierollerdnd.nethandler;
  *
  * @author jameshull
  */
-public class ConnectedPlayer {
+public class PlReceivedQueue {
 
 }
