@@ -1,10 +1,12 @@
 package com.gmail.aellondir.dierollerdnd.gui;
 
 import com.gmail.aellondir.dierollerdnd.enumerations.DiceDefinitions;
+import com.gmail.aellondir.dierollerdnd.nethandler.packet.PacketAbs;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.*;
 import java.util.ResourceBundle;
+import java.util.TreeSet;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
@@ -217,14 +219,17 @@ public class RollerFrame extends JFrame {
     private void addListeners() {
     }
 
-    public void updateJCB() {
+    public synchronized void updateUnJCB(TreeSet<String> unTS) {
         jCBPlayers.removeAllItems();
 
         jCBPlayers.addItem("--");
 
-//        for (String str : ((NetHandlerMaster) nH).getUsernames()) {
-//            jCBPlayers.addItem(str);
-//        }
+        for (String un: unTS) {
+
+            jCBPlayers.addItem(un);
+        }
+
+        jCBPlayers.validate();
     }
 
     public final void errorScreen(Exception e) {
@@ -268,7 +273,9 @@ public class RollerFrame extends JFrame {
         }
     }
 
-
+    public void acceptPacket(PacketAbs packet) {
+        //@todo logic.
+    }
 
     public static RollerFrame getFrame() {
         return rF;

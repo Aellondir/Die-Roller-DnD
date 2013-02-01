@@ -1,9 +1,16 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
-/**
- *
- * @author jameshull
- */
-public class ConnectedPlayer {
+
+public class ConnectedPlayer implements GeneralNetInterface {
+
+    @Override
+    public String getUN(boolean tOrFull) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isUNTrunc() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }
