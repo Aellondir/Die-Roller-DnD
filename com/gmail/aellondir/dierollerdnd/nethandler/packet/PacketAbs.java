@@ -16,8 +16,7 @@ public abstract class PacketAbs {
     protected String recipient = "GM";
 
     public PacketAbs() {
-        this.packetType = 0;
-        this.sentID = 0;
+        this((byte) 0, 0L, "GM");
     }
 
     public PacketAbs(byte packetType, long sentID, String recipient) {

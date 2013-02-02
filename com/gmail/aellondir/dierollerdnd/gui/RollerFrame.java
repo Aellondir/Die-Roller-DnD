@@ -1,6 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.gui;
 
 import com.gmail.aellondir.dierollerdnd.enumerations.DiceDefinitions;
+import com.gmail.aellondir.dierollerdnd.nethandler.*;
 import com.gmail.aellondir.dierollerdnd.nethandler.packet.PacketAbs;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -22,6 +23,7 @@ public class RollerFrame extends JFrame {
      * simple overriden method call for figuring out which is which.
      */
 
+    NetHandlerAbst nHA;
     private static RollerFrame rF;
     private ResourceBundle bundle;
     private JPanel[] jPanelArr;
@@ -41,6 +43,7 @@ public class RollerFrame extends JFrame {
     private JMenuItem[] jMIFileArr;
     private JMenuItem[] jMIConnArr;
     private JMenuItem[] jMIWindowArr;
+    private JLabel jLAddress;
 
     public static void main(String args[]) {
         if (System.getProperty("os.name").equals("Mac OS X")) {
@@ -161,6 +164,10 @@ public class RollerFrame extends JFrame {
 
         this.getContentPane().add(jPanelArr[5]);
 
+        jLAddress = new JLabel("fuck me hows it look");
+
+        this.getContentPane().add(jLAddress);
+        
         jCBPlayers.addItem("--");
         jCBPlayers.setEnabled(false);
         msgJB.setEnabled(false);
@@ -219,7 +226,7 @@ public class RollerFrame extends JFrame {
     private void addListeners() {
     }
 
-    public synchronized void updateUnJCB(TreeSet<String> unTS) {
+    public synchronized void updateJCBPlayers(TreeSet<String> unTS) {
         jCBPlayers.removeAllItems();
 
         jCBPlayers.addItem("--");
@@ -232,7 +239,11 @@ public class RollerFrame extends JFrame {
         jCBPlayers.validate();
     }
 
-    public final void errorScreen(Exception e) {
+    private void errorScreen(Exception e) {
+        this.errorScreen(e, new Object());
+    }
+
+    public final void errorScreen(Exception e, final Object O) {
         this.setVisible(false);
         this.removeAll();
         this.validate();
@@ -260,6 +271,10 @@ public class RollerFrame extends JFrame {
         this.getContentPane().add(jTARes);
         this.setLocationRelativeTo(null);
         this.pack();
+
+        if (O instanceof com.gmail.aellondir.dierollerdnd.nethandler.interfaces.GeneralNetInterface) {
+            nHA.shutDown();
+        }
     }
 
     @Override

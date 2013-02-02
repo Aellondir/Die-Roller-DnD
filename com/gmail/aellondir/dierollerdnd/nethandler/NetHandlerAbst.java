@@ -1,5 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
+import com.gmail.aellondir.dierollerdnd.nethandler.interfaces.NetHandlerInterface;
+
 /**
  *
  * @author James Hull
@@ -8,25 +10,41 @@ package com.gmail.aellondir.dierollerdnd.nethandler;
  */
 public abstract class NetHandlerAbst extends Thread implements NetHandlerInterface {
 
-    @Override
-    public abstract void updateJCBPlayers();
+    private String unFull,
+            passWord;
+
+    public NetHandlerAbst(String un, String passWord) {
+
+        this.unFull = un;
+        this.passWord = passWord;
+    }
 
     @Override
-    public abstract void connectionAccepted();
-
-    @Override
-    public abstract void shutDown();
+    public String getPassWord() {
+        return passWord;
+    }
 
     @Override
     public String getUN(boolean tOrFull) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (tOrFull) {
+            return this.truncUN(unFull);
+        } else {
+            return unFull;
+        }
     }
 
     @Override
-    public boolean isUNTrunc() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public final String truncUN(String un) {
+        String truncationStr = un;
 
-    public NetHandlerAbst() {
+        if (truncationStr.length() > 16) {
+            truncationStr = "";
+
+            for (byte b: un.getBytes(cs)) {
+                truncationStr += (char) b;
+            }
+        }
+
+        return truncationStr;
     }
 }
