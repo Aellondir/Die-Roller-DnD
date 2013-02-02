@@ -1,26 +1,24 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
+import com.gmail.aellondir.dierollerdnd.nethandler.interfaces.GeneralNetInterface;
 import com.gmail.aellondir.dierollerdnd.nethandler.queue.PlReceivedQueue;
 import com.gmail.aellondir.dierollerdnd.nethandler.queue.PlSendQueue;
-import com.gmail.aellondir.dierollerdnd.nethandler.interfaces.GeneralNetInterface;
 import java.io.*;
 import java.net.*;
 
-public class ConnectedPlayer implements GeneralNetInterface {
+public class ConnectedPlayer extends Thread implements GeneralNetInterface {
 
     private String unTrunc = null,
             unFull;
-
     private Socket pSocket;
-
     private DataInputStream pDis;
     private DataOutputStream pDos;
-
     private PlReceivedQueue plRQ;
     private PlSendQueue plSQ;
 
-
     public ConnectedPlayer(String unFull, Socket pSocket) throws IOException {
+        super(playerThreads, (unFull + " :DieRoller Player Thread"));
+
         this.unFull = unFull;
 
         this.unTrunc = this.truncUN(unFull);
@@ -47,7 +45,7 @@ public class ConnectedPlayer implements GeneralNetInterface {
         if (truncationStr.length() > 16) {
             truncationStr = "";
 
-            for (byte b: un.getBytes(cs)) {
+            for (byte b : un.getBytes(cs)) {
                 truncationStr += (char) b;
             }
         }
@@ -57,5 +55,10 @@ public class ConnectedPlayer implements GeneralNetInterface {
 
     public boolean isUNTrunc() {
         return unTrunc != null;
+    }
+
+    @Override
+    public void run() {
+
     }
 }

@@ -12,6 +12,7 @@ public class NetHandlerServer extends NetHandlerAbst {
     private ServerSocket sSocket;
     private HashMap<String, ConnectedPlayer> conPl;
     private int expectedConn;
+    private boolean run;
 
     public NetHandlerServer(String un, String passWord) {
         this(un, passWord, 0, 0);
@@ -35,6 +36,10 @@ public class NetHandlerServer extends NetHandlerAbst {
         }
 
         conPl = new HashMap<>(expectedConn);
+
+        if (this.nonStaticGetNHS() != null) {
+            run = true;
+        }
     }
 
     @Override
@@ -68,11 +73,24 @@ public class NetHandlerServer extends NetHandlerAbst {
 
     @Override
     public final synchronized void shutDown() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        run = false;
+        expectedConn = 0;
+
+        //@todo other shutdown methods.
     }
 
     @Override
     public void run() {
+        do {
+            while (conPl.isEmpty() || conPl.size() < expectedConn) {
+                try {
+                    Socket nSocket = sSocket.accept();
 
+
+                } catch (IOException e) {
+                    getFrame().errorScreen(e, this.nonStaticGetNHS());
+                }
+            }
+        } while (run);
     }
 }

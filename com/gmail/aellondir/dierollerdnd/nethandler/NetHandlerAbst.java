@@ -14,6 +14,7 @@ public abstract class NetHandlerAbst extends Thread implements NetHandlerInterfa
             passWord;
 
     public NetHandlerAbst(String un, String passWord) {
+        super(netThreads, (un + ":DieRoller NetHandler Thread"));
 
         this.unFull = un;
         this.passWord = passWord;
@@ -40,7 +41,7 @@ public abstract class NetHandlerAbst extends Thread implements NetHandlerInterfa
         if (truncationStr.length() > 16) {
             truncationStr = "";
 
-            for (byte b: un.getBytes(cs)) {
+            for (byte b : un.getBytes(cs)) {
                 truncationStr += (char) b;
             }
         }
