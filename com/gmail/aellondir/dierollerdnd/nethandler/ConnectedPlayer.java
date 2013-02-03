@@ -6,17 +6,24 @@ import com.gmail.aellondir.dierollerdnd.nethandler.queue.PlSendQueue;
 import java.io.*;
 import java.net.*;
 
+/**
+ *
+ * @author James Hull
+ * @serial JPGH.0001 class 5
+ * @version 0.01
+ */
 public class ConnectedPlayer extends Thread implements GeneralNetInterface {
 
     private String unTrunc = null,
             unFull;
+    private Integer preFix = null;
     private Socket pSocket;
     private DataInputStream pDis;
     private DataOutputStream pDos;
     private PlReceivedQueue plRQ;
     private PlSendQueue plSQ;
 
-    public ConnectedPlayer(String unFull, Socket pSocket) throws IOException {
+    public ConnectedPlayer(String unFull, Socket pSocket, int preFix) throws IOException {
         super(playerThreads, (unFull + " :DieRoller Player Thread"));
 
         this.unFull = unFull;

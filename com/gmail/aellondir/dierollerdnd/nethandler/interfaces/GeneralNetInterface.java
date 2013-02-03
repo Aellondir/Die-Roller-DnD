@@ -4,7 +4,7 @@ import java.nio.charset.Charset;
 
 /**
  *
- * @author jameshull
+ * @author James Hull
  * @serial JPGH.0001 interface 1
  * @version 0.01
  */

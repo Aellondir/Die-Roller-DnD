@@ -15,11 +15,11 @@ public abstract class PacketAbs {
     protected long sentID;
     protected String recipient = "GM";
 
-    public PacketAbs() {
+    protected PacketAbs() {
         this((byte) 0, 0L, "GM");
     }
 
-    public PacketAbs(byte packetType, long sentID, String recipient) {
+    protected PacketAbs(byte packetType, long sentID, String recipient) {
         this.packetType = packetType;
         this.sentID = sentID;
         this.recipient = recipient;
@@ -35,5 +35,9 @@ public abstract class PacketAbs {
 
     public final Long getSentID() {
         return sentID;
+    }
+
+    public final String getRecipient() {
+        return recipient;
     }
 }
