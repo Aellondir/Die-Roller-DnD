@@ -18,8 +18,8 @@ public class NetHandlerServer extends NetHandlerAbst {
     private static NetHandlerServer nHS;
     private ServerSocket sSocket;
     private HashMap<String, ConnectedPlayer> conPl;
-    private int expectedConn;
-    private boolean run;
+    private volatile int expectedConn;
+    private volatile boolean run;
 
     public NetHandlerServer(String un, String passWord) {
         this(un, passWord, 0, 0);
@@ -37,7 +37,7 @@ public class NetHandlerServer extends NetHandlerAbst {
         try {
             this.sSocket = new ServerSocket(port);
         } catch (final IOException e) {
-            getFrame().errorScreen(e, nonStaticGetNHS());
+            getFrame().errorScreen(e, this.nonStaticGetNHS());
 
             return;
         }
@@ -115,6 +115,8 @@ public class NetHandlerServer extends NetHandlerAbst {
 
                     if ((new DataInputStream(nSocket.getInputStream())).readByte() == 1) {
                         AuthenticateConnection aC = new AuthenticateConnection(nSocket, conPl.size());
+
+                        aC.start();
                     }
                 } catch (IOException e) {
                     getFrame().errorScreen(e, this.nonStaticGetNHS());
