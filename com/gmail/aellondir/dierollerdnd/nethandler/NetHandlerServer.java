@@ -2,7 +2,6 @@ package com.gmail.aellondir.dierollerdnd.nethandler;
 
 import static com.gmail.aellondir.dierollerdnd.gui.RollerFrame.getFrame;
 import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
-import com.gmail.aellondir.dierollerdnd.nethandler.queue.*;
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
@@ -20,7 +19,6 @@ public class NetHandlerServer extends NetHandlerAbst {
     private ServerSocket sSocket;
     private InetAddress inAddress;
     private final HashMap<String, ConnectedPlayer> conPl = new HashMap<>();
-    private final SerReceiveQueue sRQ = new SerReceiveQueue();
     private volatile int expectedConn;
     private volatile boolean run;
 
