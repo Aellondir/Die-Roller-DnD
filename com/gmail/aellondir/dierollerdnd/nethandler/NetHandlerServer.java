@@ -2,6 +2,7 @@ package com.gmail.aellondir.dierollerdnd.nethandler;
 
 import static com.gmail.aellondir.dierollerdnd.gui.RollerFrame.getFrame;
 import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
+import com.gmail.aellondir.dierollerdnd.nethandler.queue.*;
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
@@ -17,7 +18,9 @@ public class NetHandlerServer extends NetHandlerAbst {
 
     private static NetHandlerServer nHS;
     private ServerSocket sSocket;
-    private HashMap<String, ConnectedPlayer> conPl;
+    private InetAddress inAddress;
+    private final HashMap<String, ConnectedPlayer> conPl = new HashMap<>();
+    private final SerReceiveQueue sRQ = new SerReceiveQueue();
     private volatile int expectedConn;
     private volatile boolean run;
 
@@ -31,6 +34,7 @@ public class NetHandlerServer extends NetHandlerAbst {
 
     public NetHandlerServer(String un, String passWord, int port, int expectedConn) {
         super(un, passWord);
+        this.setDaemon(true);
 
         this.expectedConn = expectedConn;
 
@@ -42,18 +46,21 @@ public class NetHandlerServer extends NetHandlerAbst {
             return;
         }
 
-        conPl = new HashMap<>(expectedConn);
 
-        if (this.nonStaticGetNHS() != null) {
+        inAddress = sSocket.getInetAddress();
+
+        if (this.nonStaticGetNHS() != null && sSocket != null && sSocket.isBound()) {
             run = true;
         }
     }
 
     @Override
-    public synchronized void updateJCBPlayers() {
-        TreeSet<String> tS = new TreeSet(conPl.keySet());
+    public void updateJCBPlayers() {
+        synchronized (conPl) {
+            TreeSet<String> tS = new TreeSet(conPl.keySet());
 
-        getFrame().updateJCBPlayers(tS);
+            getFrame().updateJCBPlayers(tS);
+        }
     }
 
     private NetHandlerServer nonStaticGetNHS() {
@@ -68,28 +75,56 @@ public class NetHandlerServer extends NetHandlerAbst {
         return nHS;
     }
 
-    @Override
-    public synchronized void connectionAccepted(Socket socket, HandShakePacket packet) {
-        try {
-            if (conPl.isEmpty()) {
-                if (packet.isIsUnTrunc()) {
-                    conPl.put(packet.getUn(), new ConnectedPlayer(packet.getUnFull(), socket, 0));
-                }
-            } else {
-                int preFix = 0;
+    public InetAddress getInetAddress() {
+        return inAddress;
+    }
 
-                while (conPl.containsKey((Integer.toString(preFix) + packet.getUn()))) {
-                    preFix++;
-                }
+    private void sendAllPlayers(PacketAbs packet) {
+        for (ConnectedPlayer cPl: conPl.values()) {
+            cPl.addToSendQueue(packet);
+        }
+    }
 
-                if (preFix > 0) {
-                    conPl.put(Integer.toString(preFix) + packet.getUn(), new ConnectedPlayer(packet.getUnFull(), socket, preFix));
+    private void checkConPls() {
+        synchronized (conPl) {
+            for (ConnectedPlayer cPl : conPl.values()) {
+                if (cPl.isConnected()) {
+                    continue;
                 } else {
-                    conPl.put(packet.getUn(), new ConnectedPlayer(packet.getUnFull(), socket, 0));
+                    try {
+                        cPl.shutdown();
+                    } catch (IOException e) {
+                        getFrame().errorScreen(e, this);
+                    }
                 }
             }
-        } catch (IOException e) {
-            getFrame().errorScreen(e, this);
+        }
+    }
+
+    @Override
+    public void connectionAccepted(Socket socket, HandShakePacket packet) {
+        synchronized (conPl) {
+            try {
+                if (conPl.isEmpty()) {
+                    if (packet.isIsUnTrunc()) {
+                        conPl.put(packet.getUn(), new ConnectedPlayer(packet.getUnFull(), socket, 0));
+                    }
+                } else {
+                    int preFix = 0;
+
+                    while (conPl.containsKey((Integer.toString(preFix) + packet.getUn()))) {
+                        preFix++;
+                    }
+
+                    if (preFix > 0) {
+                        conPl.put(Integer.toString(preFix) + packet.getUn(), new ConnectedPlayer(packet.getUnFull(), socket, preFix));
+                    } else {
+                        conPl.put(packet.getUn(), new ConnectedPlayer(packet.getUnFull(), socket, 0));
+                    }
+                }
+            } catch (IOException e) {
+                getFrame().errorScreen(e, this);
+            }
         }
     }
 
@@ -99,9 +134,13 @@ public class NetHandlerServer extends NetHandlerAbst {
     }
 
     @Override
-    public final synchronized void shutDown() {
+    public final void shutDown() {
         run = false;
         expectedConn = 0;
+
+        synchronized (this) {
+            this.notify();
+        }
 
         //@todo other shutdown methods.
     }
@@ -109,6 +148,8 @@ public class NetHandlerServer extends NetHandlerAbst {
     @Override
     public void run() {
         do {
+            this.checkConPls();
+
             while (conPl.isEmpty() || conPl.size() < expectedConn) {
                 try {
                     Socket nSocket = sSocket.accept();
@@ -122,6 +163,16 @@ public class NetHandlerServer extends NetHandlerAbst {
                     getFrame().errorScreen(e, this.nonStaticGetNHS());
                 }
             }
+
+            synchronized (this) {
+                try {
+                    this.wait(30000L);
+                } catch (InterruptedException e) {
+                    getFrame().errorScreen(e, this);
+                }
+            }
+
+            this.sendAllPlayers(new KeepAlivePacket());
         } while (run);
     }
 }

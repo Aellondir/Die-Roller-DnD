@@ -39,7 +39,7 @@ public class AuthenticateConnection extends Thread {
 
                 getNHS().connectionAccepted(socket, packet);
             } else if (pTFail && pWFail) {
-
+                
             } else if (pTFail == false && pWFail == true) {
 
             } else if (pTFail == true && pWFail == false) {

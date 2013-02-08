@@ -1,6 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
 import com.gmail.aellondir.dierollerdnd.nethandler.interfaces.GeneralNetInterface;
+import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
 import com.gmail.aellondir.dierollerdnd.nethandler.queue.PlReceivedQueue;
 import com.gmail.aellondir.dierollerdnd.nethandler.queue.PlSendQueue;
 import java.io.*;
@@ -20,8 +21,9 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
     private Socket pSocket;
     private DataInputStream pDis;
     private DataOutputStream pDos;
-    private PlReceivedQueue plRQ;
-    private PlSendQueue plSQ;
+    private final PlReceivedQueue plRQ = new PlReceivedQueue();
+    private final PlSendQueue plSQ = new PlSendQueue();
+    private volatile boolean run = false;
 
     public ConnectedPlayer(String unFull, Socket pSocket, int preFix) throws IOException {
         super(playerThreads, (unFull + " :DieRoller Player Thread"));
@@ -34,6 +36,8 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
 
         this.pDis = new DataInputStream(pSocket.getInputStream());
         this.pDos = new DataOutputStream(pSocket.getOutputStream());
+
+        run = true;
     }
 
     @Override
@@ -64,8 +68,23 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
         return unTrunc != null;
     }
 
+    public void shutdown() throws IOException {
+    }
+
+    public void addToSendQueue(PacketAbs packet) {
+        synchronized (plSQ) {
+            //@todo add method for pLSQ called.
+        }
+    }
+
+    protected boolean isConnected() {
+        return (pSocket.isConnected() && !pSocket.isClosed());
+    }
+
     @Override
     public void run() {
-
+        while (run) {
+            //@todo run logic for running.
+        }
     }
 }

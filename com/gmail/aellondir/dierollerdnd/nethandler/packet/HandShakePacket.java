@@ -4,7 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-
+/**
+ *
+ * @author James Hull
+ * @serial JPGH.0001 class 11
+ * @version 0.01
+ */
 public class HandShakePacket extends PacketAbs {
 
     private String un = null,

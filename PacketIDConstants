@@ -2,11 +2,11 @@
 -128=OutOfSyncPacket
 //packetIDConstants 0: assigned to Abstract Base Packet should never be sent might send an exception at the offending client.
 0=Packet
-//packetIDConstants 1 -- 63: reserved for connection packets should not be
-//used after packets have been sent.
+//packetIDConstants 1 -- 63: reserved for connection/living packets.
 1=ConnectPacket
 2=ConnectionAcceptedPacket
 3=ConnectionDeniedPacket
+4=KeepAlivePacket
 //packetIDConstants 64 -- 127: used for requesting and receiving die rolls.
 64=PlayerUNsPacket
 65=RollDicePacket
