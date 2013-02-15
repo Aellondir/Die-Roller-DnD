@@ -78,7 +78,7 @@ public class NetHandlerServer extends NetHandlerAbst {
     }
 
     private void sendAllPlayers(PacketAbs packet) {
-        for (ConnectedPlayer cPl: conPl.values()) {
+        for (ConnectedPlayer cPl : conPl.values()) {
             cPl.addToSendQueue(packet);
         }
     }
@@ -123,6 +123,30 @@ public class NetHandlerServer extends NetHandlerAbst {
             } catch (IOException e) {
                 getFrame().errorScreen(e, this);
             }
+
+            conPl.get(packet.getUn()).addToSendQueue(new AcceptPacket(0));
+        }
+    }
+
+    @Override
+    public void connectionDenied(Socket socket, byte reason) {
+        if (socket.isClosed() && socket.isConnected()) {
+            try {
+                socket.shutdownInput();
+
+                DataOutputStream dOS = new DataOutputStream(socket.getOutputStream());
+
+                new DeniedPacket(-1, reason).processSendPacket(dOS);
+
+            } catch (IOException e) {
+                getFrame().errorScreen(e, this);
+            }
+        }
+
+        try {
+            socket.close();
+        } catch (IOException e) {
+            getFrame().errorScreen(e, this);
         }
     }
 

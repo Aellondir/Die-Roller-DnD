@@ -1,6 +1,7 @@
 package com.gmail.aellondir.dierollerdnd.nethandler.queue;
 
-import com.gmail.aellondir.dierollerdnd.nethandler.interfaces.ReceiveQueue;
+import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *
@@ -8,6 +9,12 @@ import com.gmail.aellondir.dierollerdnd.nethandler.interfaces.ReceiveQueue;
  * @serial JPGH.0001 class 7
  * @version 0.01
  */
-public class PlReceivedQueue implements ReceiveQueue {
+public class PlReceivedQueue extends Thread {
 
+
+
+    @Override
+    public void run() {
+        //@todo logic
+    }
 }

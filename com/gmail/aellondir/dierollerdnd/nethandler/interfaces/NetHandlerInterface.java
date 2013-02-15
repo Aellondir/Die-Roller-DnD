@@ -15,6 +15,8 @@ public interface NetHandlerInterface extends GeneralNetInterface {
 
     public void connectionAccepted(Socket socket, HandShakePacket packet);
 
+    public void connectionDenied(Socket socket, byte reason);
+
     public String getPassWord();
 
     public boolean isServer();
