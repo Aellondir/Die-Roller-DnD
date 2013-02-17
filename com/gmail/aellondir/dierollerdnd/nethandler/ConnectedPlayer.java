@@ -1,11 +1,11 @@
 package com.gmail.aellondir.dierollerdnd.nethandler;
 
+import static com.gmail.aellondir.dierollerdnd.gui.RollerFrame.getFrame;
 import com.gmail.aellondir.dierollerdnd.nethandler.interfaces.GeneralNetInterface;
 import com.gmail.aellondir.dierollerdnd.nethandler.packet.*;
-import com.gmail.aellondir.dierollerdnd.nethandler.queue.PlReceivedQueue;
-import com.gmail.aellondir.dierollerdnd.nethandler.queue.PlSendQueue;
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.*;
 
 /**
  *
@@ -73,7 +73,7 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
 
     public void addToSendQueue(PacketAbs packet) {
         synchronized (plSQ) {
-            //@todo add method for pLSQ called.
+            this.plSQ.addToQueue(packet);
         }
     }
 
@@ -84,7 +84,59 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
     @Override
     public void run() {
         while (run) {
-            //@todo run logic for running.
+            if (pDis.available() > 0) {
+
+            }
+
+            plSQ.trySend();
         }
+    }
+
+    private class PlSendQueue extends Thread {
+
+        private final LinkedTransferQueue<PacketAbs> sQueue = new LinkedTransferQueue<>();
+        private volatile boolean run = true, send = false;
+
+        private PlSendQueue() {
+           super(playerThreads, unTrunc + ":Send Queue");
+        }
+
+        private boolean addToQueue(PacketAbs packet) {
+            if (packet.getPacketType() <= 1 && !(packet.getPacketType() <= -1)) {
+                return false;
+            }
+
+            synchronized (sQueue) {
+                return sQueue.add(packet);
+            }
+        }
+
+        private void trySend() {
+            send = true;
+        }
+
+        @Override
+        public void run() {
+            while (run) {
+                if (send && !(sQueue.isEmpty())) {
+
+                    try {
+                        sQueue.poll().processSendPacket(pDos);
+                    } catch (IOException e) {
+                        getFrame().errorScreen(e, this);
+                    }
+                } else if (sQueue.isEmpty()) {
+                    send = false;
+                }
+            }
+        }
+    }
+
+    private class PlReceivedQueue {
+
+        private final LinkedBlockingQueue<PacketAbs> rQueue = new LinkedBlockingQueue<>();
+        private volatile boolean run = true;
+
+
     }
 }

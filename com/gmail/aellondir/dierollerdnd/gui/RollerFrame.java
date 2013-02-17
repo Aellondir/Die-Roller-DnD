@@ -167,7 +167,7 @@ public class RollerFrame extends JFrame {
         jLAddress = new JLabel("fuck me hows it look");
 
         this.getContentPane().add(jLAddress);
-        
+
         jCBPlayers.addItem("--");
         jCBPlayers.setEnabled(false);
         msgJB.setEnabled(false);
@@ -288,10 +288,6 @@ public class RollerFrame extends JFrame {
         }
     }
 
-    public void acceptPacket(PacketAbs packet) {
-        //@todo logic.
-    }
-
     public static RollerFrame getFrame() {
         return rF;
     }
@@ -355,5 +351,9 @@ public class RollerFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
         }
+    }
+
+    private class PacketHandler extends Thread {
+        //@todo ummm this...
     }
 }
