@@ -15,7 +15,7 @@ import java.util.concurrent.*;
  */
 public class ConnectedPlayer extends Thread implements GeneralNetInterface {
 
-    private String unTrunc = null,
+    private String unTrunc,
             unFull;
     private Integer prefix = null;
     private Socket pSocket;
@@ -25,12 +25,14 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
     private final PlSendQueue plSQ = new PlSendQueue();
     private volatile boolean run = false;
 
-    public ConnectedPlayer(String unFull, Socket pSocket, int preFix) throws IOException {
+    public ConnectedPlayer(String unFull, Socket pSocket, int prefix) throws IOException {
         super(playerThreads, (unFull + " :DieRoller Player Thread"));
 
         this.unFull = unFull;
 
         this.unTrunc = this.truncUN(unFull);
+
+        this.prefix = new Integer(prefix);
 
         this.pSocket = pSocket;
 
@@ -78,8 +80,43 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
     }
 
     public void addToSendQueue(PacketAbs packet) {
+
         synchronized (plSQ) {
-            this.plSQ.addToQueue(packet);
+            try {
+                int check = this.plSQ.addToQueue(packet);
+
+                if (check == 1) {
+                    // only two packets should return this; handshake or PacketAbs, if an abstract packet is the cause shits
+                    // fucked and an exception will be raised, if its the other variety a handshake... shits really fucked and an exception will be raised.
+
+                    switch (packet.getPacketType()) {
+                        case 0:
+                            throw new UnsupportedOperationException("An abstract packet somehow made it here this is wrong... and in theory impossible");
+                        case 1:
+                            throw new UnsupportedOperationException("A handshake packet should not be sent at this point lets"
+                                    + " try to figure out how it was sent.");
+                        default:
+                            throw new Exception("Soooooooo... something went wrong and I am not sure what it is.");
+                    }
+
+                } else if (check == 2) {
+                    plRQ.tryBlockingAdd(packet);
+                }
+            } catch (IOException | InterruptedException e) {
+                if (e instanceof InterruptedException) {
+                    InterruptedException internalE = new InterruptedException(e.getMessage() + "  So yeah that happended... MAKE SURE YOU SEND ME THIS!!!");
+
+                    internalE.setStackTrace(e.getStackTrace());
+
+                    getFrame().errorScreen(internalE, this);
+                } else {
+                    getFrame().errorScreen(e, this);
+                }
+            } catch (UnsupportedOperationException e) {
+                getFrame().errorScreen(e, this);
+            } catch (Exception e) {
+                getFrame().errorScreen(e, this);
+            }
         }
     }
 
@@ -102,25 +139,36 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
 
 
                     if (check == 1) {
-                        //@todo check packet logic/method.
+                        // only two packets should return this; handshake or PacketAbs, if an abstract packet is the cause shits
+                        // fucked and an exception will be raised, if its the other variety a handshake... shits really fucked and an exception will be raised.
+
+                        switch (pA.getPacketType()) {
+                            case 0:
+                                throw new UnsupportedOperationException("An abstract packet somehow made it here this is wrong... and in theory impossible");
+                            case 1:
+                                throw new UnsupportedOperationException("A handshake packet should not be sent at this point lets"
+                                        + " try to figure out how it was sent.");
+                            default:
+                                throw new Exception("Soooooooo... something went wrong and I am not sure what it is.");
+                        }
                     } else if (check == 2) {
-                       //@todo tryBlockingAdd
-                    } else if (check == 3) {
-                        //@todo FUCK.
+                        plRQ.tryBlockingAdd(pA);
                     }
                 }
             } catch (IOException | InterruptedException e) {
                 if (e instanceof InterruptedException) {
-                    InterruptedException internalE = new InterruptedException(e.getMessage() + " So yeah that happended... MAKE SURE YOU SEND ME THIS!!!");
+                    InterruptedException internalE = new InterruptedException(e.getMessage() + "  So yeah that happended... MAKE SURE YOU SEND ME THIS!!!");
 
                     internalE.setStackTrace(e.getStackTrace());
 
                     getFrame().errorScreen(internalE, this);
-                }
-
-                else {
+                } else {
                     getFrame().errorScreen(e, this);
                 }
+            } catch (UnsupportedOperationException e) {
+                getFrame().errorScreen(e, this);
+            } catch (Exception e) {
+                getFrame().errorScreen(e, this);
             }
 
             plSQ.trySend();
@@ -146,7 +194,10 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
             }
         }
 
-        private int tryBlockingAdd() {
+        private boolean tryBlockingAdd(PacketAbs packet) {
+            synchronized (sQueue) {
+                return sQueue.add(packet);
+            }
         }
 
         private void trySend() {
@@ -189,8 +240,10 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
             }
         }
 
-        private int tryBlockingAdd(PacketAbs packet) {
-            return -1;
+        private boolean tryBlockingAdd(PacketAbs packet) {
+            synchronized (rQueue) {
+                return rQueue.add(packet);
+            }
         }
 
         @Override
