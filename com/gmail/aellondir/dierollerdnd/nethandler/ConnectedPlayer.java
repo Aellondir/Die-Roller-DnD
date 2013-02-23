@@ -17,7 +17,7 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
 
     private String unTrunc = null,
             unFull;
-    private Integer preFix = null;
+    private Integer prefix = null;
     private Socket pSocket;
     private DataInputStream pDis;
     private DataOutputStream pDos;
@@ -42,11 +42,15 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
 
     @Override
     public String getUN(boolean tOrFull) {
-        if (tOrFull && this.isUNTrunc()) {
+        if (tOrFull && this.isUNTrunc() && prefix != null) {
+            return prefix.toString() + unTrunc;
+        } else if (prefix != null) {
+            return prefix.toString() + unFull;
+        } else if (tOrFull && this.isUNTrunc()) {
             return this.unTrunc;
+        } else {
+            return unFull;
         }
-
-        return unFull;
     }
 
     @Override
@@ -59,9 +63,11 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
             for (byte b : un.getBytes(cs)) {
                 truncationStr += (char) b;
             }
-        }
 
-        return truncationStr;
+            return truncationStr;
+        } else {
+            return null;
+        }
     }
 
     public boolean isUNTrunc() {
@@ -84,8 +90,37 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
     @Override
     public void run() {
         while (run) {
-            if (pDis.available() > 0) {
+            try {
+                if (pDis.available() > 0) {
+                    byte b = pDis.readByte();
 
+                    PacketAbs pA = PacketFactory.getInstance().getByPacketType(b);
+
+                    pA.processReadPacket(pDis);
+
+                    int check = plRQ.addToQueue(pA);
+
+
+                    if (check == 1) {
+                        //@todo check packet logic/method.
+                    } else if (check == 2) {
+                       //@todo tryBlockingAdd
+                    } else if (check == 3) {
+                        //@todo FUCK.
+                    }
+                }
+            } catch (IOException | InterruptedException e) {
+                if (e instanceof InterruptedException) {
+                    InterruptedException internalE = new InterruptedException(e.getMessage() + " So yeah that happended... MAKE SURE YOU SEND ME THIS!!!");
+
+                    internalE.setStackTrace(e.getStackTrace());
+
+                    getFrame().errorScreen(internalE, this);
+                }
+
+                else {
+                    getFrame().errorScreen(e, this);
+                }
             }
 
             plSQ.trySend();
@@ -98,17 +133,20 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
         private volatile boolean run = true, send = false;
 
         private PlSendQueue() {
-           super(playerThreads, unTrunc + ":Send Queue");
+            super(playerThreads, unTrunc + ":Send Queue");
         }
 
-        private boolean addToQueue(PacketAbs packet) {
+        private int addToQueue(PacketAbs packet) {
             if (packet.getPacketType() <= 1 && !(packet.getPacketType() <= -1)) {
-                return false;
+                return 1;
             }
 
             synchronized (sQueue) {
-                return sQueue.add(packet);
+                return sQueue.offer(packet, 1000L, TimeUnit.MILLISECONDS) ? 0 : 2;
             }
+        }
+
+        private int tryBlockingAdd() {
         }
 
         private void trySend() {
@@ -132,11 +170,36 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
         }
     }
 
-    private class PlReceivedQueue {
+    private class PlReceivedQueue extends Thread {
 
         private final LinkedBlockingQueue<PacketAbs> rQueue = new LinkedBlockingQueue<>();
         private volatile boolean run = true;
 
+        public PlReceivedQueue() {
+            super(playerThreads, unTrunc + ":Received Queue");
+        }
 
+        private int addToQueue(PacketAbs packet) throws InterruptedException {
+            if (packet.getPacketType() < 2 && !(packet.getPacketType() <= -1)) {
+                return 1;
+            }
+
+            synchronized (rQueue) {
+                return rQueue.offer(packet, 1000L, TimeUnit.MILLISECONDS) ? 0 : 2;
+            }
+        }
+
+        private int tryBlockingAdd(PacketAbs packet) {
+            return -1;
+        }
+
+        @Override
+        public void run() {
+            while (run) {
+                if (!rQueue.isEmpty()) {
+                    //@todo send packets to where they belong.
+                }
+            }
+        }
     }
 }

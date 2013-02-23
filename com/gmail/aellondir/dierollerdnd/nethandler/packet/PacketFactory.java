@@ -7,6 +7,13 @@ package com.gmail.aellondir.dierollerdnd.nethandler.packet;
  * @version 0.01
  */
 public class PacketFactory {
+    private static PacketFactory me = new PacketFactory();
 
-    
+    public static PacketFactory getInstance() {
+        return me;
+    }
+
+    public PacketAbs getByPacketType(byte b) {
+        return new HandShakePacket();
+    }
 }

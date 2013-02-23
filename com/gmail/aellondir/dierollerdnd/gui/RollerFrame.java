@@ -292,67 +292,6 @@ public class RollerFrame extends JFrame {
         return rF;
     }
 
-    private class RFMouseListener implements MouseListener {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
-    }
-
-    private class RFMouseWheelListener implements MouseWheelListener {
-
-        @Override
-        public void mouseWheelMoved(MouseWheelEvent e) {
-            if (e.getWheelRotation() > 0) {
-                if (jCBDice.getSelectedIndex() + 1 <= jCBDice.getItemCount()) {
-                    jCBDice.setSelectedIndex(jCBDice.getSelectedIndex() + 1);
-                }
-            } else {
-                if (jCBDice.getSelectedIndex() - 1 >= 0) {
-                    jCBDice.setSelectedIndex(jCBDice.getSelectedIndex() - 1);
-                }
-            }
-        }
-    }
-
-    private class RFKeyListener implements KeyListener {
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-        }
-    }
-
-    private class RFActionListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-        }
-    }
-
     private class PacketHandler extends Thread {
         //@todo ummm this...
     }
