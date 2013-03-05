@@ -1,0 +1,31 @@
+# $ = Finished no possible way I can think of at this time to make it better.
+# * = as finished as it can be.
+# + = waiting on other classes to be finished before this class can be finalized.
+# / = not worked on at this point.
+
+Abstract Classes:
+
+1.              PacketAbs.java *
+2.         NetHandlerAbst.java *
+
+Classes:
+
+1.            RollerFrame.java +
+2.              DieRoller.java $
+3.       NetHandlerServer.java +
+4.          PacketFactory.java /
+5.        ConnectedPlayer.java *
+6. AuthenticateConnection.java *
+7.        HandShakePacket.java *
+8.        KeepAlivePacket.java *
+9.           AcceptPacket.java *
+10.          DeniedPAcket.java *
+
+Enumerations:
+
+1.        DiceDefinitions.java $
+
+Interfaces:
+
+1.    GeneralNetInterface.java *
+2.    NetHandlerInterface.java *

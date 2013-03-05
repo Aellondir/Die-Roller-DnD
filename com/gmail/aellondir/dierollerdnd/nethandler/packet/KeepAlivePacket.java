@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  *
  * @author James Hull
- * @serial JPGH.0001 class 10
+ * @serial JPGH.0001 class 8
  * @version 0.01
  */
 public class KeepAlivePacket extends PacketAbs {

@@ -96,7 +96,8 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
                             throw new UnsupportedOperationException("A handshake packet should not be sent at this point lets"
                                     + " try to figure out how it was sent.");
                         default:
-                            throw new Exception("Soooooooo... something went wrong and I am not sure what it is.");
+                            throw new Exception("Soooooooo... something went wrong and I am not sure what it is.  The packet that got us here was "
+                                    + Integer.toString(packet.getPacketType()));
                     }
 
                 } else if (check == 2) {
@@ -149,7 +150,8 @@ public class ConnectedPlayer extends Thread implements GeneralNetInterface {
                                 throw new UnsupportedOperationException("A handshake packet should not be sent at this point lets"
                                         + " try to figure out how it was sent.");
                             default:
-                                throw new Exception("Soooooooo... something went wrong and I am not sure what it is.");
+                                throw new Exception("Soooooooo... something went wrong and I am not sure what it is.  The packet that got us here was "
+                                        + Integer.toString(pA.getPacketType()));
                         }
                     } else if (check == 2) {
                         plRQ.tryBlockingAdd(pA);

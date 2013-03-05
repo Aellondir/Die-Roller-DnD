@@ -4,7 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-
+/**
+ *
+ * @author James Hull
+ * @serial JPGH.0001 class 10
+ * @version 0.01
+ */
 public class DeniedPacket extends PacketAbs {
 
     private final String[] REASONS = {"The GM doesn't like you.",

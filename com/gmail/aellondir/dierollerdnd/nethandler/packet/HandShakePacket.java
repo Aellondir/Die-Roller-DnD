@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  *
  * @author James Hull
- * @serial JPGH.0001 class 9
+ * @serial JPGH.0001 class 7
  * @version 0.01
  */
 public class HandShakePacket extends PacketAbs {
