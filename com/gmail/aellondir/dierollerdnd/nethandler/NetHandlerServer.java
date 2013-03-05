@@ -39,9 +39,11 @@ public class NetHandlerServer extends NetHandlerAbst {
         try {
             this.sSocket = new ServerSocket(port);
         } catch (final IOException e) {
-            getFrame().errorScreen(e, this.nonStaticGetNHS());
-
-            return;
+            try {
+                sSocket = new ServerSocket(0);
+            } catch (final IOException e1) {
+                getFrame().errorScreen(, this.nonStaticGetNHS());
+            }
         }
 
 
@@ -50,6 +52,10 @@ public class NetHandlerServer extends NetHandlerAbst {
         if (this.nonStaticGetNHS() != null && sSocket != null && sSocket.isBound()) {
             run = true;
         }
+    }
+
+    public NetHandlerServer(NetHandlerServer nHS) {
+        this(nHS.getUN(false), nHS.getPassWord(), (nHS.getPort() + 1), nHS.getExpectedConnections());
     }
 
     @Override
@@ -61,6 +67,7 @@ public class NetHandlerServer extends NetHandlerAbst {
         }
     }
 
+    //only used to if an exception is thrown and there is nothing to
     private NetHandlerServer nonStaticGetNHS() {
         if (nHS == null) {
             nHS = this;
@@ -71,6 +78,14 @@ public class NetHandlerServer extends NetHandlerAbst {
 
     public static NetHandlerServer getNHS() {
         return nHS;
+    }
+
+    public int getExpectedConnections() {
+        return expectedConn;
+    }
+
+    public int getPort() {
+        return sSocket.getLocalPort();
     }
 
     public InetAddress getInetAddress() {

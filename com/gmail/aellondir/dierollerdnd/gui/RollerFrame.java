@@ -68,12 +68,13 @@ public class RollerFrame extends JFrame {
     public RollerFrame() {
         try {
             this.initComponents();
+            throw new Exception("test");
         } catch (Exception e) {
             this.errorScreen(e);
         }
     }
 
-    private void initComponents() {
+    private void initComponents() throws Exception {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         bundle = ResourceBundle.getBundle("com.gmail.aellondir.dierollerdnd.gui.Bundle");
@@ -164,10 +165,6 @@ public class RollerFrame extends JFrame {
 
         this.getContentPane().add(jPanelArr[5]);
 
-        jLAddress = new JLabel("fuck me hows it look");
-
-        this.getContentPane().add(jLAddress);
-
         jCBPlayers.addItem("--");
         jCBPlayers.setEnabled(false);
         msgJB.setEnabled(false);
@@ -239,36 +236,60 @@ public class RollerFrame extends JFrame {
         jCBPlayers.validate();
     }
 
-    private void errorScreen(Exception e) {
-        this.errorScreen(e, new Object());
+    private void errorScreen(Exception... e) {
+        this.errorScreen(new Object(), e);
     }
 
-    public final void errorScreen(Exception e, final Object O) {
+    public final void errorScreen(final Object O, Exception... eArr) {
         this.setVisible(false);
         this.removeAll();
         this.validate();
 
-        int columns = e.toString().length(), rows = 1;
-        this.setLayout(new GridBagLayout());
+        int columns = -1, rows = 1;
+       this.setLayout(new GridBagLayout());
 
-        JTextArea jTAErr = new JTextArea(e.toString() + "\n\n");
+        JTextArea jTAErr = new JTextArea();
+
+        for (Exception e: eArr) {
+            int errorNum = 1;
+
+            if (columns == -1) {
+                columns = e.toString().length();
+
+                jTAErr.setText(e.toString() + "\n\n");
+            } else {
+                columns = e.toString().length() > columns ? e.toString().length() : columns;
+
+                jTAErr.append("\nError # " + Integer.toString(errorNum));
+            }
+
+
+
+            for (StackTraceElement sTE : e.getStackTrace()) {
+                columns = sTE.toString().length() > columns ? sTE.toString().length() : columns;
+
+                jTARes.append(sTE.toString() + '\n');
+
+                rows++;
+            }
+
+            errorNum++;
+        }
+
         jTAErr.setLineWrap(true);
         jTAErr.setWrapStyleWord(true);
         jTAErr.setEditable(false);
 
-        for (StackTraceElement sTE : e.getStackTrace()) {
-            columns = sTE.toString().length() > columns ? sTE.toString().length() : columns;
-
-            jTARes.append(sTE.toString() + '\n');
-
-            rows++;
+        jTAErr.setColumns(columns);
+        if (rows <= 50) {
+            jTAErr.setRows(rows);
+        } else {
+            jTAErr.setRows(50);
         }
+        jTAErr.validate();
 
-        jTARes.setColumns(columns);
-        jTARes.setRows(rows);
-        jTARes.validate();
-
-        this.getContentPane().add(jTARes);
+        //this.getContentPane().add(new JScrollPane(jTAErr, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+        this.getContentPane().add(jTAErr);
         this.setLocationRelativeTo(null);
         this.pack();
 
