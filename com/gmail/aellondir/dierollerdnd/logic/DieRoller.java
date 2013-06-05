@@ -7,7 +7,7 @@ import java.util.Random;
  * Returns one random number for each run of the specific die roller.
  *
  * @author James Hull
- * @serial JPGH.0001 class 2
+ * @serial JPGH.0001 class 1
  * @version 0.1
  */
 public class DieRoller {

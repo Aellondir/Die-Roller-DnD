@@ -5,27 +5,8 @@
 
 Abstract Classes:
 
-1.              PacketAbs.java *
-2.         NetHandlerAbst.java *
-
 Classes:
-
-1.            RollerFrame.java +
-2.              DieRoller.java $
-3.       NetHandlerServer.java +
-4.          PacketFactory.java /
-5.        ConnectedPlayer.java *
-6. AuthenticateConnection.java *
-7.        HandShakePacket.java *
-8.        KeepAlivePacket.java *
-9.           AcceptPacket.java *
-10.          DeniedPAcket.java *
 
 Enumerations:
 
-1.        DiceDefinitions.java $
-
 Interfaces:
-
-1.    GeneralNetInterface.java *
-2.    NetHandlerInterface.java *

@@ -1,17 +1,17 @@
 //packetIDConstants -1 -- -128: reserved for error packets.
--128=OutOfSyncPacket
+    -128=OutOfSyncPacket
 //packetIDConstants 0: assigned to Abstract Base Packet should never be sent might send an exception at the offending client.
-0=Packet
+    0=Packet
 //packetIDConstants 1 -- 63: reserved for connection/living packets.
-1=HandShakePacket
-2=AcceptedPacket
-3=DeniedPacket
-4=KeepAlivePacket
-//packetIDConstants 64 -- 127: used for requesting and receiving die rolls.
-64=PlayerUNsPacket
-65=RollDicePacket
-66=ResultPacket
-67=MultiResultPacket
-68=ChatPacket
-69=KickPacket
+    1=HandShakePacket
+    2=AcceptedPacket
+    3=DeniedPacket
+    4=KeepAlivePacket
+//packetIDConstants 64 -- 127: used for requesting and receiving die rolls, and other less well defined uses at this point.
+    122=PlayerUNsPacket
+    123=RollDicePacket
+    124=ResultPacket
+    125=MultiResultPacket
+    126=ChatPacket
+    127=KickPacket
 
